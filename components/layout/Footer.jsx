@@ -1,32 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaYoutube } from 'react-icons/fa';
-import { settingsAPI, quickLinkAPI } from '../../lib/api';
+import { useSiteData } from '../../lib/SiteDataContext';
 
 function SkeletonBlock({ w='w-full', h='h-4' }) {
   return <div className={`skeleton ${w} ${h} rounded`}/>;
 }
 
 export default function Footer() {
-  const [settings,  setSettings]  = useState(null);
-  const [quickLinks,setQuickLinks]= useState([]);
-  const [footerLinks,setFooterLinks]= useState([]);
-  const [loaded,    setLoaded]    = useState(false);
-
-  useEffect(() => {
-    Promise.allSettled([
-      settingsAPI.get(),
-      quickLinkAPI.getAll({ section:'important' }),
-      quickLinkAPI.getAll({ section:'footer' }),
-    ]).then(([s, q, f]) => {
-      if (s.status === 'fulfilled') setSettings(s.value.data);
-      if (q.status === 'fulfilled') setQuickLinks(q.value.data || []);
-      if (f.status === 'fulfilled') setFooterLinks(f.value.data || []);
-      setLoaded(true);
-    });
-  }, []);
+  const { settings, quickLinksImportant:quickLinks, quickLinksFooter:footerLinks, loaded, ensureLoaded } = useSiteData();
+  useEffect(() => { ensureLoaded(); }, [ensureLoaded]);
 
   return (
     <footer style={{ background:'var(--color-footer-bg)' }} className="text-gray-300">

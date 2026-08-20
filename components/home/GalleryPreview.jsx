@@ -36,13 +36,13 @@ export default function GalleryPreview() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-3 gap-1 p-1">
+          <div className="grid grid-cols-3 gap-2 p-2">
             {[...Array(6)].map((_,i)=>(
               <div key={i} className="bg-gray-200 animate-pulse rounded" style={{aspectRatio:'4/3'}}/>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-3 gap-1 p-1">
+          <div className="grid grid-cols-3 gap-2 p-2">
             {images.map((img, i) => (
               <motion.button key={img._id}
                 whileHover={{ scale:1.02 }}
@@ -62,7 +62,7 @@ export default function GalleryPreview() {
         )}
 
         <div className="p-3 bg-gray-50 border-t text-center">
-          <Link href="/gallery" className="btn-primary text-sm inline-flex items-center gap-2 py-1.5">
+          <Link href="/gallery" className="btn-primary rounded-full text-sm inline-flex items-center gap-2 py-1.5 px-5">
             সব ছবি দেখুন »
           </Link>
         </div>

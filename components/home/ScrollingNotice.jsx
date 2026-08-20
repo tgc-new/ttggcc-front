@@ -1,30 +1,43 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { FaBullhorn } from 'react-icons/fa';
-import { scrollingAPI, settingsAPI } from '../../lib/api';
+import { useSiteData } from '../../lib/SiteDataContext';
 
 export default function ScrollingNotice() {
-  const [text,   setText]   = useState('');
-  const [active, setActive] = useState(true);
+  const { settings, scrollTexts, loaded, ensureLoaded } = useSiteData();
+  useEffect(() => { ensureLoaded(); }, [ensureLoaded]);
 
-  useEffect(() => {
-    Promise.allSettled([scrollingAPI.getAll(), settingsAPI.get()])
-      .then(([scRes, sRes]) => {
-        const setting = sRes.status === 'fulfilled' ? sRes.value.data : null;
-        if (setting?.isScrollingActive === false) { setActive(false); return; }
-        setActive(true);
-        if (scRes.status === 'fulfilled' && scRes.value.data?.length > 0) {
-          setText(scRes.value.data.map(t => t.text).join('   ✦   '));
-        } else if (setting?.scrollingNotice) {
-          setText(setting.scrollingNotice);
-        }
-      });
-  }, []);
+  if (!loaded) {
+    return <div className="h-9 md:h-10 bg-gray-100 animate-pulse"/>;
+  }
 
-  if (!text || !active) return null;
+  const active = settings?.isScrollingActive !== false;
+  const text = scrollTexts.length > 0
+    ? scrollTexts.map(t => t.text).join('   ✦   ')
+    : (settings?.scrollingNotice || '');
+
+  if (!active || !text) return null;
 
   return (
-    <></>
+    <div className="flex items-stretch text-sm" style={{ background:'linear-gradient(90deg,#0D47A1,#1565C0)' }}>
+      <div className="flex items-center gap-1.5 px-3 md:px-4 flex-shrink-0 font-bold"
+        style={{ background:'#FFD600', color:'#1A237E' }}>
+        <FaBullhorn size={13}/>
+        <span className="hidden sm:inline">সংবাদ</span>
+      </div>
+      <div className="flex-1 min-w-0 overflow-hidden flex items-center px-3">
+        <div className="notice-scroll-wrapper w-full">
+          <span className="notice-scroll-content text-white font-medium">
+            {text}&nbsp;&nbsp;✦&nbsp;&nbsp;{text}
+          </span>
+        </div>
+      </div>
+      <Link href="/notice"
+        className="flex items-center px-3 md:px-4 flex-shrink-0 font-bold whitespace-nowrap hover:opacity-90 transition-opacity"
+        style={{ background:'#FFD600', color:'#1A237E' }}>
+        সব দেখুন »
+      </Link>
+    </div>
   );
 }

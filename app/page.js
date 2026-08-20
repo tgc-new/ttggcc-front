@@ -1,64 +1,62 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar      from '../components/layout/Navbar';
 import Footer      from '../components/layout/Footer';
-import ScrollingNotice from '../components/home/ScrollingNotice';
 import NoticeBoard from '../components/home/NoticeBoard';
 import PrincipalMessage from '../components/home/PrincipalMessage';
 import QuickLinks  from '../components/home/QuickLinks';
 import CalendarWidget from '../components/home/CalendarWidget';
-import StatsSection from '../components/home/StatsSection';
+import HotlineWidget from '../components/home/HotlineWidget';
 import HomeMenuGrid from '../components/home/HomeMenuGrid';
+import QuickButtonsRow from '../components/home/QuickButtonsRow';
 import LocationMap from '../components/home/LocationMap';
-import { settingsAPI } from '../lib/api';
+import { useSiteData } from '../lib/SiteDataContext';
 
-// Images load after text — lazy loaded
-const HeroSlider    = dynamic(() => import('../components/home/HeroSlider'),    { ssr: false, loading: () => <div className="bg-gray-200 animate-pulse" style={{ height:'380px' }}/> });
-const GalleryPreview= dynamic(() => import('../components/home/GalleryPreview'),{ ssr: false, loading: () => <div className="skeleton rounded-xl h-40"/> });
+// Images load after text — dynamically imported so their code and the
+// pictures they fetch are not part of the initial bundle/paint at all.
+const HeroSlider     = dynamic(() => import('../components/home/HeroSlider'),     { ssr: false, loading: () => <div className="bg-gray-200 animate-pulse" style={{ height:'400px' }}/> });
+const GalleryPreview = dynamic(() => import('../components/home/GalleryPreview'), { ssr: false, loading: () => <div className="skeleton rounded-xl h-40"/> });
 
 export default function HomePage() {
-  const [settings, setSettings] = useState(null);
+  const { settings, ensureLoaded } = useSiteData();
 
+  useEffect(() => { ensureLoaded(); }, [ensureLoaded]);
   useEffect(() => {
-    settingsAPI.get().then(r => {
-      setSettings(r.data);
-      if (r.data?.collegeName) {
-        document.title = `${r.data.collegeName} - অফিসিয়াল ওয়েবসাইট`;
-      }
-    }).catch(() => {});
-  }, []);
+    if (settings?.collegeName) document.title = `${settings.collegeName} - অফিসিয়াল ওয়েবসাইট`;
+  }, [settings]);
 
   return (
     <>
       <Navbar/>
       <main>
-        {/* 1. Images (lazy) */}
+        {/* Hero image — lazy, loads after the text-only chrome above it */}
         <HeroSlider/>
-        {/* 2. Text content loads immediately */}
-        <ScrollingNotice/>
-        <div className="container mx-auto px-3 md:px-4 py-4">
-          {/* Stats — text only, numbers from API */}
-          <StatsSection/>
-          {/* Menu grid — static text, loads instantly */}
-          <HomeMenuGrid/>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-            {/* Left column */}
+
+        <div className="container mx-auto px-3 md:px-4 py-4 space-y-4">
+          {/* Colorful quick-link buttons — plain text/CSS, paints instantly */}
+          <QuickButtonsRow/>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Left column: notices + 10-category info grid */}
             <div className="lg:col-span-2 space-y-4">
-              {/* Notice board — text content */}
               <NoticeBoard/>
-              {/* Gallery — lazy loaded images */}
-              <GalleryPreview/>
+              <HomeMenuGrid/>
             </div>
-            {/* Right sidebar — text content */}
+            {/* Right sidebar */}
             <div className="space-y-4">
               <PrincipalMessage type="principal"/>
               <PrincipalMessage type="chairman"/>
               <QuickLinks/>
               <CalendarWidget/>
+              <HotlineWidget/>
             </div>
           </div>
-          {/* Map — iframe loads lazily */}
+
+          {/* Gallery — lazy loaded images */}
+          <GalleryPreview/>
+
+          {/* Map — iframe deferred until scrolled near */}
           <LocationMap/>
         </div>
       </main>

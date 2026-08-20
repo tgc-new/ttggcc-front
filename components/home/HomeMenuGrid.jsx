@@ -1,124 +1,135 @@
 import Link from 'next/link';
 import {
-  FaBuilding, FaChalkboard, FaUniversity, FaUsers, FaFileAlt,
-  FaVoteYea, FaImages, FaDownload, FaGlobe, FaHandshake, FaUserTie
+  FaLandmark, FaUserTie, FaMobileAlt, FaClipboardList, FaChartBar,
+  FaFileSignature, FaCamera, FaCloudDownloadAlt, FaLaptop, FaTheaterMasks,
+  FaCaretRight,
 } from 'react-icons/fa';
 
 const menuSections = [
   {
-    title:'প্রতিষ্ঠান পরিচিতি', color:'bg-blue-700', icon:FaBuilding,
+    title:'প্রতিষ্ঠান পরিচিতি', color:'#6A1B9A', icon:FaLandmark,
     items:[
       { label:'কলেজের ইতিহাস',     href:'/about' },
-      { label:'লক্ষ্য ও উদ্দেশ্য', href:'/about#objectives' },
-      { label:'ভিশন-মিশন',          href:'/about#vision' },
-      { label:'সভাপতির বাণী',       href:'/about#principal' },
+      { label:'মিশন ও ভিশন',        href:'/about#vision' },
+      { label:'সুযোগ-সুবিধা',       href:'/about#facilities' },
+      { label:'সাফল্যসমূহ',         href:'/about#achievements' },
+      { label:'শিক্ষক পরিষদ',       href:'/teachers' },
+      { label:'অর্গানোগ্রাম',        href:'/about#organogram' },
+      { label:'পরিচালনা পর্ষদ',     href:'/committee' },
       { label:'অধ্যক্ষের বাণী',     href:'/about#chairman' },
-      { label:'প্রতিষ্ঠানের তথ্য',  href:'/about#info' },
+      { label:'স্টাফ ও কর্মচারী',   href:'/about#staff' },
     ]
   },
   {
-    title:'প্রশাসন', color:'bg-purple-700', icon:FaUserTie,
+    title:'প্রশাসন', color:'#1565C0', icon:FaUserTie,
     items:[
       { label:'শিক্ষকবৃন্দ',        href:'/teachers' },
-      { label:'পরিচালনা কমিটি',      href:'/committee' },
-      { label:'অনুমোদন ও স্বীকৃতি', href:'/approvals' },
-      { label:'MPO তথ্য',            href:'/mpo' },
+      { label:'পরিচালনা পর্ষদ',     href:'/committee' },
+      { label:'শিক্ষক প্রশিক্ষণ',   href:'/about#training' },
+      { label:'ক্লাব ব্যবস্থাপনা',  href:'/contact' },
     ]
   },
   {
-    title:'একাডেমিক', color:'bg-cyan-700', icon:FaChalkboard,
+    title:'একাডেমিক', color:'#00695C', icon:FaMobileAlt,
     items:[
-      { label:'উচ্চ মাধ্যমিক রুটিন',   href:'/exam#routine' },
-      { label:'ক্লাস সময়সূচী',          href:'/academic#schedule' },
-      { label:'পাঠ পরিকল্পনা',           href:'/academic#syllabus' },
-      { label:'বিভাগ পরিচিতি',           href:'/academic#departments' },
+      { label:'উচ্চ মাধ্যমিক রুটিন', href:'/exam#routine' },
+      { label:'স্নাতক (পাস)',         href:'/admission' },
+      { label:'স্নাতক (সম্মান)',      href:'/admission' },
+      { label:'বিভাগসমূহ',            href:'/academic#departments' },
+      { label:'প্রোগ্রামসমূহ',        href:'/academic#programs' },
+      { label:'সিলেবাস',               href:'/academic#syllabus' },
       { label:'একাডেমিক ক্যালেন্ডার', href:'/academic#calendar' },
     ]
   },
   {
-    title:'ভর্তি', color:'bg-orange-600', icon:FaUniversity,
+    title:'ভর্তি', color:'#E65100', icon:FaClipboardList,
     items:[
-      { label:'অনলাইনে আবেদন',    href:'/admission' },
-      { label:'ভর্তির যোগ্যতা',   href:'/admission#eligibility' },
-      { label:'শাখা তালিকা',       href:'/admission#branches' },
-      { label:'আসন সংখ্যা',        href:'/admission#seats' },
-      { label:'ছাত্র-ছাত্রী তথ্য', href:'/students' },
+      { label:'অনলাইনে আবেদন',   href:'/admission' },
+      { label:'উচ্চ মাধ্যমিক ভর্তি', href:'/admission' },
+      { label:'স্নাতক ভর্তি',       href:'/admission' },
+      { label:'স্নাতক পাস ভর্তি',  href:'/admission' },
+      { label:'ভর্তির শর্তাবলী',    href:'/admission#eligibility' },
+      { label:'ভর্তির পদ্ধতি',      href:'/admission#process' },
     ]
   },
   {
-    title:'পরীক্ষা ও ফলাফল', color:'bg-red-700', icon:FaFileAlt,
+    title:'পরীক্ষা ও ফলাফল', color:'#C62828', icon:FaChartBar,
     items:[
-      { label:'পরীক্ষার রুটিন',        href:'/exam#routine' },
-      { label:'অভ্যন্তরীণ ফলাফল',      href:'/exam#results' },
-      { label:'পাবলিক ফলাফল',           href:'/exam#public' },
-      { label:'পাশের হার পরিসংখ্যান', href:'/exam#passrate' },
+      { label:'অভ্যন্তরীণ এডমিট কার্ড', href:'/exam#admit' },
+      { label:'অভ্যন্তরীণ ফলাফল',        href:'/exam#results' },
+      { label:'উচ্চ মাধ্যমিক ফলাফল',     href:'/exam#public' },
+      { label:'স্নাতক পাস ফলাফল',        href:'/exam#public' },
+      { label:'স্নাতক ফলাফল',            href:'/exam#public' },
     ]
   },
   {
-    title:'ফর্ম পূরণ', color:'bg-teal-700', icon:FaVoteYea,
+    title:'ফর্ম পূরণ', color:'#4527A0', icon:FaFileSignature,
     items:[
-      { label:'ভর্তি ফর্ম',       href:'/admission' },
-      { label:'ছাত্র নাম ফর্ম',   href:'/notice' },
-      { label:'টেস্টিমোনিয়াল',    href:'/notice' },
+      { label:'এইচএসসি ফর্ম',    href:'/exam' },
+      { label:'স্নাতক পাস ফর্ম', href:'/admission' },
+      { label:'স্নাতক ফর্ম',      href:'/admission' },
     ]
   },
   {
-    title:'গ্যালারি', color:'bg-pink-700', icon:FaImages,
+    title:'গ্যালারি', color:'#558B2F', icon:FaCamera,
     items:[
-      { label:'ছবি গ্যালারি',  href:'/gallery' },
-      { label:'ইভেন্টসমূহ',    href:'/gallery?category=event' },
-      { label:'ক্যাম্পাস',     href:'/gallery?category=campus' },
+      { label:'ফটো গ্যালারি',  href:'/gallery' },
+      { label:'ভিডিও গ্যালারি', href:'/gallery?category=video' },
+      { label:'ইভেন্টসমূহ',     href:'/gallery?category=event' },
     ]
   },
   {
-    title:'ডাউনলোড ও সেবা', color:'bg-indigo-700', icon:FaDownload,
+    title:'ডাউনলোড ও সেবা', color:'#37474F', icon:FaCloudDownloadAlt,
     items:[
-      { label:'নোটিশবোর্ড PDF',  href:'/notice' },
-      { label:'রুটিন ডাউনলোড',   href:'/exam' },
-      { label:'অনুমোদন দলিল',    href:'/approvals' },
+      { label:'ফর্ম ডাউনলোড',      href:'/notice' },
+      { label:'সিটিজেন চার্টার',   href:'/about' },
+      { label:'নোটিশ বোর্ড',        href:'/notice' },
+      { label:'অফিস আদেশ',          href:'/notice' },
     ]
   },
   {
-    title:'অনলাইন সেবা', color:'bg-green-800', icon:FaGlobe,
+    title:'অনলাইন শিক্ষা', color:'#0277BD', icon:FaLaptop,
     items:[
-      { label:'শিক্ষা বোর্ড',           href:'http://www.dhakaeducationboard.gov.bd' },
-      { label:'জাতীয় বিশ্ববিদ্যালয়', href:'http://www.nu.ac.bd' },
-      { label:'EMIS | DSHE',            href:'http://www.dshe.gov.bd' },
-      { label:'ফলাফল যাচাই',            href:'http://www.educationboardresults.gov.bd' },
+      { label:'EasyCollegeMate', href:'#' },
+      { label:'ই-লাইব্রেরি',      href:'#' },
+      { label:'গ্রন্থাগার',        href:'/about' },
+      { label:'ইউটিউব লিংক',      href:'#' },
     ]
   },
   {
-    title:'সমাজসেবা কার্যক্রম', color:'bg-yellow-700', icon:FaHandshake,
+    title:'সহশিক্ষা কার্যক্রম', color:'#1B5E20', icon:FaTheaterMasks,
     items:[
-      { label:'ক্লাব কার্যক্রম',   href:'/contact' },
-      { label:'সামাজিক কার্যক্রম', href:'/contact' },
+      { label:'ক্লাব ব্যবস্থাপনা', href:'/contact' },
+      { label:'শিক্ষক প্রশিক্ষণ',  href:'/about#training' },
+      { label:'বিএনসিসি',           href:'/contact' },
+      { label:'রোভার স্কাউটস',      href:'/contact' },
     ]
   },
 ];
 
 export default function HomeMenuGrid() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 my-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {menuSections.map(({ title, color, icon:Icon, items }) => (
         <div key={title} className="card overflow-hidden">
-          <div className={`${color} text-white px-3 py-2 flex items-center gap-2`}>
-            <Icon size={13} className="flex-shrink-0"/>
-            <span className="text-xs font-semibold truncate">{title}</span>
+          <div className="text-white px-4 py-2.5 flex items-center gap-2" style={{ background: color }}>
+            <Icon size={14} className="flex-shrink-0"/>
+            <span className="text-sm font-semibold truncate">{title}</span>
           </div>
           <ul className="divide-y divide-gray-100">
             {items.map(({ label, href }) => (
               <li key={label}>
                 {href.startsWith('http') ? (
                   <a href={href} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-700 hover:text-primary hover:bg-green-50 transition-colors">
-                    <span className="text-primary">›</span>
-                    <span className="line-clamp-1">{label}</span>
+                    className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 transition-colors">
+                    <FaCaretRight className="text-green-600 flex-shrink-0" size={12}/>
+                    <span className="line-clamp-1 hover:underline" style={{ color:'#1565C0' }}>{label}</span>
                   </a>
                 ) : (
                   <Link href={href}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-gray-700 hover:text-primary hover:bg-green-50 transition-colors">
-                    <span className="text-primary">›</span>
-                    <span className="line-clamp-1">{label}</span>
+                    className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 transition-colors">
+                    <FaCaretRight className="text-green-600 flex-shrink-0" size={12}/>
+                    <span className="line-clamp-1 hover:underline" style={{ color:'#1565C0' }}>{label}</span>
                   </Link>
                 )}
               </li>

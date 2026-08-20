@@ -1,19 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Link from 'next/link';
-import { FaLink } from 'react-icons/fa';
-import { quickLinkAPI } from '../../lib/api';
+import { FaLink, FaCaretRight } from 'react-icons/fa';
+import { useSiteData } from '../../lib/SiteDataContext';
 
 export default function QuickLinks() {
-  const [links,  setLinks]  = useState([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    quickLinkAPI.getAll({ section:'important' })
-      .then(r => setLinks(r.data || []))
-      .catch(() => {})
-      .finally(() => setLoaded(true));
-  }, []);
+  const { quickLinksImportant, loaded, ensureLoaded } = useSiteData();
+  useEffect(() => { ensureLoaded(); }, [ensureLoaded]);
 
   return (
     <div className="card overflow-hidden">
@@ -29,23 +22,22 @@ export default function QuickLinks() {
               <div className="skeleton-text w-36 h-3 flex-1"/>
             </li>
           ))
-        ) : links.length === 0 ? (
+        ) : quickLinksImportant.length === 0 ? (
           <li className="px-4 py-3 text-xs text-gray-400">কোনো লিংক নেই</li>
         ) : (
-          links.map(l => (
+          quickLinksImportant.map(l => (
             <li key={l._id}>
               {l.isExternal ? (
                 <a href={l.url} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors group">
-                  <span className="flex-shrink-0 text-xs" style={{ color:'var(--color-primary)' }}>›</span>
-                  <span className="text-sm text-gray-700 group-hover:text-inherit truncate"
-                    style={{ '--hover-color':'var(--color-primary)' }}>{l.labelBn || l.label}</span>
+                  className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                  <FaCaretRight className="text-green-600 flex-shrink-0" size={12}/>
+                  <span className="text-sm truncate hover:underline" style={{ color:'#1565C0' }}>{l.labelBn || l.label}</span>
                 </a>
               ) : (
                 <Link href={l.url}
-                  className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors group">
-                  <span className="flex-shrink-0 text-xs" style={{ color:'var(--color-primary)' }}>›</span>
-                  <span className="text-sm text-gray-700 group-hover:text-inherit truncate">{l.labelBn || l.label}</span>
+                  className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                  <FaCaretRight className="text-green-600 flex-shrink-0" size={12}/>
+                  <span className="text-sm truncate hover:underline" style={{ color:'#1565C0' }}>{l.labelBn || l.label}</span>
                 </Link>
               )}
             </li>

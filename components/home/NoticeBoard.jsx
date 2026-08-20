@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaFilePdf, FaBell, FaExternalLinkAlt, FaGoogleDrive } from 'react-icons/fa';
+import { FaFilePdf, FaBell, FaCaretRight, FaGoogleDrive } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { noticesAPI } from '../../lib/api';
@@ -17,30 +17,21 @@ export default function NoticeBoard() {
       .finally(()=>setLoading(false));
   }, []);
 
-  const catColors = {
-    academic:'bg-blue-100 text-blue-700',
-    admission:'bg-green-100 text-green-700',
-    exam:'bg-orange-100 text-orange-700',
-    urgent:'bg-red-100 text-red-700',
-    result:'bg-purple-100 text-purple-700',
-    general:'bg-gray-100 text-gray-700',
-  };
-
   return (
     <div className="card overflow-hidden">
-      <div className="section-title bg-primary">
+      <div className="section-title">
         <FaBell className="text-yellow-300" size={16}/>
-        <span>নোটিশ বোর্ড</span>
+        <span>Notice Board</span>
       </div>
 
       <div className="divide-y divide-gray-100">
         {loading ? (
           [...Array(6)].map((_,i)=>(
             <div key={i} className="px-4 py-3 flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-gray-200 flex-shrink-0"/>
+              <div className="w-2.5 h-2.5 rounded-full bg-gray-200 flex-shrink-0"/>
               <div className="flex-1 space-y-1.5">
                 <div className="h-3.5 bg-gray-200 animate-pulse rounded w-4/5"/>
-                <div className="h-2.5 bg-gray-100 animate-pulse rounded w-1/3"/>
+                <div className="h-2.5 bg-gray-100 animate-pulse rounded w-1/4"/>
               </div>
             </div>
           ))
@@ -52,21 +43,17 @@ export default function NoticeBoard() {
               initial={{ opacity:0, x:-10 }}
               animate={{ opacity:1, x:0 }}
               transition={{ delay:i*0.04 }}
-              className="flex items-start gap-3 px-4 py-3 hover:bg-green-50 transition-colors group">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"/>
+              className="flex items-start gap-2.5 px-4 py-3 hover:bg-green-50 transition-colors group">
+              <FaCaretRight className="text-green-600 mt-1 flex-shrink-0" size={14}/>
               <div className="flex-1 min-w-0">
                 <Link href={`/notice/${notice._id}`}
-                  className="text-sm font-medium text-gray-800 hover:text-primary transition-colors line-clamp-2 group-hover:text-primary">
+                  className="text-sm font-medium leading-snug line-clamp-2 hover:underline"
+                  style={{ color:'#1565C0' }}>
                   {notice.titleBn || notice.title}
                 </Link>
-                <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  <span className="text-xs text-gray-400">
-                    {format(new Date(notice.publishDate),'dd/MM/yyyy')}
-                  </span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${catColors[notice.category]||catColors.general}`}>
-                    {notice.category}
-                  </span>
-                </div>
+                <span className="block text-xs text-gray-400 mt-0.5">
+                  {format(new Date(notice.publishDate),'dd/MM/yyyy')}
+                </span>
               </div>
               <div className="flex items-center gap-1.5 flex-shrink-0">
                 {notice.isNewNotice && <span className="badge-new">নতুন</span>}
@@ -90,8 +77,8 @@ export default function NoticeBoard() {
       </div>
 
       <div className="p-3 bg-gray-50 border-t text-center">
-        <Link href="/notice" className="btn-primary text-sm inline-flex items-center gap-2 py-1.5">
-          আরো দেখুন <FaExternalLinkAlt size={11}/>
+        <Link href="/notice" className="btn-primary rounded-full text-sm inline-flex items-center gap-2 py-1.5 px-5">
+          আরও দেখুন »
         </Link>
       </div>
     </div>
