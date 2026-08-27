@@ -1,0 +1,705 @@
+/* ============================================================
+   Teacher Directory — scoped styles
+   -----------------------------------------------------------
+   Desktop (>=768px): numbered horizontal list rows
+   Mobile  (<768px):  responsive card grid
+   Base text size: 15px, with a small type scale for hierarchy.
+   All brand colors are read from the site's CSS variables
+   (see app/globals.css) so this page automatically follows
+   whichever theme is active from the admin panel — nothing
+   here is hardcoded to one color scheme.
+   ============================================================ */
+
+.pageWrap {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ── Toolbar: search + per-page ─────────────────────────── */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.searchBox {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 460px;
+}
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 13px;
+  pointer-events: none;
+}
+.searchInput {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px 38px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: var(--border-radius, 8px);
+  background: #fff;
+  color: #1f2937;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.searchInput::placeholder { color: #9ca3af; }
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.clearSearch {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  border-radius: 50%;
+}
+.clearSearch:hover { color: #4b5563; background: #f3f4f6; }
+
+.perPageWrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.perPageLabel { font-size: 14px; color: #6b7280; white-space: nowrap; }
+.perPageSelect {
+  font-size: 15px;
+  padding: 8px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: var(--border-radius, 8px);
+  background: #fff;
+  color: #1f2937;
+  cursor: pointer;
+}
+.perPageSelect:focus { outline: none; border-color: var(--color-primary); }
+
+/* ── Employee-type tabs ─────────────────────────────────── */
+.filterTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.filterTab {
+  font-size: 14px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #4b5563;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filterTab:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.filterTabActive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.filterTabActive:hover { color: #fff; }
+
+/* ── Department chips ───────────────────────────────────── */
+.deptRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: #f8f9fa;
+  border-radius: var(--border-radius, 8px);
+  border: 1px solid #f0f0f0;
+}
+.deptRowLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.deptChips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+.deptChips::-webkit-scrollbar { height: 4px; }
+.deptChips::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+.deptChip {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #4b5563;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.deptChip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.deptChipActive {
+  background: color-mix(in srgb, var(--color-primary) 12%, white);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ── Results line ────────────────────────────────────────── */
+.resultsLine {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.resetBtn {
+  font-size: 13px;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 70px 20px;
+  color: #9ca3af;
+  text-align: center;
+}
+.emptyIcon { color: #d1d5db; }
+.emptyState p { font-size: 15px; margin: 0; }
+
+/* ============================================================
+   DESKTOP LIST  (>=768px) — hidden by default, shown at md+
+   MOBILE GRID  (<768px)  — shown by default, hidden at md+
+   Both toggles live here (not in Tailwind utility classes) so
+   the visibility switch never depends on stylesheet load order.
+   ============================================================ */
+.desktopList { display: none; }
+
+.mobileGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+@media (min-width: 480px) {
+  .mobileGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .desktopList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .mobileGrid { display: none; }
+}
+
+/* ── Desktop row ─────────────────────────────────────────── */
+.teacherRow {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  background: var(--color-card-bg, #fff);
+  border: 1px solid #ebebeb;
+  border-radius: var(--border-radius, 10px);
+  padding: 16px 18px;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+.teacherRow:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, #ebebeb);
+  transform: translateY(-2px);
+}
+
+.rowNumber {
+  flex-shrink: 0;
+  align-self: flex-start;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-primary) 10%, white);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.rowPhoto {
+  position: relative;
+  flex-shrink: 0;
+  width: 92px;
+  height: 108px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f3f4f6;
+  border: 1px solid #eee;
+}
+.rowPhotoImg { object-fit: cover; }
+.rowPhotoFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--color-primary) 35%, white);
+  background: color-mix(in srgb, var(--color-primary) 6%, white);
+}
+.rowRibbon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-secondary, #c41e3a);
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+  padding: 2px 2px;
+  font-weight: 600;
+}
+
+.infoPanel,
+.infoPanelSecondary {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 18px;
+}
+.infoPanel { border-right: 1px dashed #e5e7eb; }
+
+.infoRow {
+  display: flex;
+  gap: 10px;
+  font-size: 14px;
+  align-items: baseline;
+}
+.infoLabel {
+  flex-shrink: 0;
+  width: 76px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+.infoValue {
+  color: #374151;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.infoValueStrong {
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.linkValue { color: var(--color-primary); text-decoration: none; }
+.linkValue:hover { text-decoration: underline; }
+
+.typeBadge {
+  flex-shrink: 0;
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.3px;
+}
+.type_mpo { background: #dcfce7; color: #15803d; }
+.type_non-mpo { background: #ffedd5; color: #c2410c; }
+.type_part-time { background: #e0e7ff; color: #4338ca; }
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.actionLink {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+  font-weight: 600;
+}
+.actionLink:hover { text-decoration: underline; }
+.actionDivider { color: #d1d5db; font-size: 12px; }
+
+/* ============================================================
+   MOBILE / TABLET CARDS  (<768px)
+   ============================================================ */
+.teacherCard {
+  background: var(--color-card-bg, #fff);
+  border: 1px solid #ebebeb;
+  border-radius: var(--border-radius, 10px);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.teacherCard:hover,
+.teacherCard:active {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cardPhoto {
+  position: relative;
+  width: 100%;
+  padding-top: 118%;
+  background: #f3f4f6;
+}
+.cardPhotoImg { object-fit: cover; }
+.cardPhotoFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--color-primary) 35%, white);
+  background: color-mix(in srgb, var(--color-primary) 6%, white);
+}
+.cardRibbon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--color-secondary, #c41e3a);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+.cardTypeBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.cardBody { padding: 10px 12px 12px; }
+.cardName {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 2px;
+}
+.cardDesignation {
+  font-size: 12.5px;
+  color: var(--color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 2px;
+}
+.cardDept {
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 8px;
+}
+
+.cardActions { display: flex; gap: 6px; margin-top: 8px; }
+.cardActionBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  color: #fff;
+}
+.cardActionBtn:active { transform: scale(0.92); }
+.callBtn { background: #16a34a; }
+.mailBtn { background: #2563eb; }
+.vcardBtn { background: #7c3aed; }
+.viewBtn { background: var(--color-primary); }
+
+/* ============================================================
+   Skeletons
+   ============================================================ */
+.skeletonRow {
+  height: 132px;
+  border-radius: var(--border-radius, 10px);
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: teacherShimmer 1.4s ease infinite;
+}
+.skeletonCard {
+  aspect-ratio: 3 / 4.3;
+  border-radius: var(--border-radius, 10px);
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
+  background-size: 400% 100%;
+  animation: teacherShimmer 1.4s ease infinite;
+}
+@keyframes teacherShimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* ============================================================
+   Pagination
+   ============================================================ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 30px 0 10px;
+}
+.pageNumWrap { display: flex; align-items: center; gap: 4px; }
+.pageNavBtn,
+.pageBtn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pageNavBtn:hover:not(:disabled),
+.pageBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.pageNavBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.pageBtnActive {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.pageBtnActive:hover { color: #fff; }
+.pageEllipsis { color: #9ca3af; font-size: 13px; padding: 0 2px; }
+
+/* ============================================================
+   Detail modal
+   ============================================================ */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modalCard {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+}
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+  cursor: pointer;
+  z-index: 2;
+}
+.modalClose:hover { background: #fff; color: #1f2937; }
+
+.modalHeader {
+  text-align: center;
+  padding: 30px 24px 18px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 12%, white), white 70%);
+}
+.modalPhoto {
+  position: relative;
+  width: 108px;
+  height: 128px;
+  margin: 0 auto 14px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+.modalPhotoImg { object-fit: cover; }
+.modalPhotoFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--color-primary) 35%, white);
+  background: color-mix(in srgb, var(--color-primary) 8%, white);
+}
+.modalName { font-size: 19px; font-weight: 700; color: #1f2937; margin: 0 0 4px; }
+.modalDesignation { font-size: 14px; color: var(--color-primary); font-weight: 600; margin: 0; }
+.modalRibbon {
+  display: inline-block;
+  margin-top: 8px;
+  background: var(--color-secondary, #c41e3a);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 999px;
+}
+
+.modalBody { padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+.modalRow { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+.modalRowIcon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--color-primary) 10%, white);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.modalRowLabel { flex-shrink: 0; width: 96px; color: #9ca3af; font-weight: 500; }
+.modalRowValue { color: #374151; font-weight: 500; }
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px 22px;
+  border-top: 1px solid #f0f0f0;
+}
+.modalActionBtn,
+.modalActionBtnOutline {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  border-radius: var(--border-radius, 8px);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  transition: opacity 0.15s;
+}
+.modalActionBtn { background: var(--color-primary); color: #fff; }
+.modalActionBtnOutline {
+  background: #fff;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}
+.modalActionBtn:hover,
+.modalActionBtnOutline:hover { opacity: 0.85; }
+
+/* ============================================================
+   Keyboard focus (visible focus ring on every custom control)
+   ============================================================ */
+.filterTab:focus-visible,
+.deptChip:focus-visible,
+.actionLink:focus-visible,
+.cardActionBtn:focus-visible,
+.pageNavBtn:focus-visible,
+.pageBtn:focus-visible,
+.modalActionBtn:focus-visible,
+.modalActionBtnOutline:focus-visible,
+.modalClose:focus-visible,
+.clearSearch:focus-visible,
+.resetBtn:focus-visible,
+.teacherCard:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Responsive fine-tuning
+   ============================================================ */
+@media (max-width: 1024px) {
+  .infoLabel { width: 62px; font-size: 13px; }
+  .rowPhoto { width: 80px; height: 96px; }
+  .infoPanel, .infoPanelSecondary { padding: 4px 12px; }
+}
+
+@media (max-width: 380px) {
+  .mobileGrid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .cardName { font-size: 13.5px; }
+}
+
+@media print {
+  .toolbar, .filterTabs, .deptRow, .pagination, .cardActions, .rowActions { display: none !important; }
+}
+
+/* Respect the person's OS-level reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .teacherRow, .teacherCard, .cardActionBtn, .filterTab, .deptChip, .pageBtn, .pageNavBtn {
+    transition: none !important;
+  }
+  .teacherRow:hover, .teacherCard:hover { transform: none; }
+  .skeletonRow, .skeletonCard { animation: none; }
+}
