@@ -13,7 +13,7 @@ export default function PrincipalMessage({ type = 'principal' }) {
   const name         = isPrincipal ? (settings?.principalNameBn  || settings?.principalName)  : (settings?.chairmanNameBn  || settings?.chairmanName);
   const designation  = isPrincipal ?  settings?.principalDesignation  :  settings?.chairmanDesignation;
   const photo        = isPrincipal ?  settings?.principalPhoto?.url   :  settings?.chairmanPhoto?.url;
-  const sectionTitle = isPrincipal ? 'সভাপতির বাণী' : 'অধ্যক্ষের বাণী';
+  const sectionTitle = isPrincipal ? 'অধ্যক্ষের বাণী' : 'উপাধ্যক্ষ বাণী';
 
   if (!loaded) {
     return (
