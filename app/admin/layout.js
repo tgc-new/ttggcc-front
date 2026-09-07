@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
-  FaTachometerAlt, FaBell, FaChalkboardTeacher, FaImages, FaUsers,
+  FaTachometerAlt, FaBell, FaChalkboardTeacher, FaUserCog, FaImages, FaUsers,
   FaUserGraduate, FaCog, FaSignOutAlt, FaBars, FaTimes, FaUserShield,
   FaShieldAlt, FaClipboardList, FaAward, FaAddressCard, FaChevronDown,
   FaChevronRight, FaPalette, FaLink, FaBullhorn, FaCompass
@@ -20,6 +20,7 @@ const navGroups = [
     items:[
       { label:'নোটিশ',            href:'/admin/dashboard/notices',   icon:FaBell },
       { label:'শিক্ষক',           href:'/admin/dashboard/teachers',  icon:FaChalkboardTeacher },
+      { label:'স্টাফ',            href:'/admin/dashboard/staff',     icon:FaUserCog },
       { label:'গ্যালারি',         href:'/admin/dashboard/gallery',   icon:FaImages },
       { label:'কমিটি',            href:'/admin/dashboard/committee', icon:FaUsers },
       { label:'শিক্ষার্থী',      href:'/admin/dashboard/students',  icon:FaUserGraduate },

@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
-  FaBell, FaChalkboardTeacher, FaImages, FaUsers, FaUserGraduate,
+  FaBell, FaChalkboardTeacher, FaUserCog, FaImages, FaUsers, FaUserGraduate,
   FaCog, FaArrowRight, FaGlobe, FaClipboardList, FaAward,
   FaUserShield, FaAddressCard, FaPalette, FaLink, FaBullhorn, FaCompass
 } from 'react-icons/fa';
-import { noticesAPI, teachersAPI, galleryAPI, studentsAPI } from '../../../lib/api';
+import { noticesAPI, teachersAPI, staffAPI, galleryAPI, studentsAPI } from '../../../lib/api';
 
 function StatCard({ icon:Icon, label, value, href, color }) {
   return (
@@ -27,6 +27,7 @@ function StatCard({ icon:Icon, label, value, href, color }) {
 const manageLinks = [
   { title:'নোটিশ',          href:'/admin/dashboard/notices',    icon:FaBell,           desc:'নোটিশ যোগ ও মুছুন' },
   { title:'শিক্ষক',         href:'/admin/dashboard/teachers',   icon:FaChalkboardTeacher,desc:'শিক্ষকের তথ্য' },
+  { title:'স্টাফ',          href:'/admin/dashboard/staff',      icon:FaUserCog,        desc:'স্টাফ ও কর্মচারীর তথ্য' },
   { title:'গ্যালারি',       href:'/admin/dashboard/gallery',    icon:FaImages,         desc:'ছবি আপলোড ও মুছুন' },
   { title:'কমিটি',          href:'/admin/dashboard/committee',  icon:FaUsers,          desc:'পরিচালনা কমিটি' },
   { title:'শিক্ষার্থী',    href:'/admin/dashboard/students',   icon:FaUserGraduate,   desc:'পরিসংখ্যান আপডেট' },
@@ -42,7 +43,7 @@ const manageLinks = [
 ];
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ notices:0, teachers:0, gallery:0, students:0 });
+  const [stats, setStats] = useState({ notices:0, teachers:0, staff:0, gallery:0, students:0 });
   const [admin, setAdmin] = useState(null);
 
   useEffect(() => {
@@ -51,12 +52,14 @@ export default function AdminDashboard() {
     Promise.allSettled([
       noticesAPI.getAll({ limit:1 }),
       teachersAPI.getAll(),
+      staffAPI.getAll(),
       galleryAPI.getAll({ limit:1 }),
       studentsAPI.get(),
-    ]).then(([n,t,g,s]) => {
+    ]).then(([n,t,st,g,s]) => {
       setStats({
         notices:  n.status==='fulfilled' ? (n.value.pagination?.total||0) : 0,
         teachers: t.status==='fulfilled' ? (t.value.data?.length||0) : 0,
+        staff:    st.status==='fulfilled' ? (st.value.data?.length||0) : 0,
         gallery:  g.status==='fulfilled' ? (g.value.pagination?.total||0) : 0,
         students: s.status==='fulfilled' ? (s.value.data?.totalStudents||0) : 0,
       });
@@ -88,9 +91,10 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <StatCard icon={FaBell}             label="মোট নোটিশ"    value={stats.notices}  href="/admin/dashboard/notices"  color="var(--color-btn-primary)"/>
         <StatCard icon={FaChalkboardTeacher} label="মোট শিক্ষক"  value={stats.teachers} href="/admin/dashboard/teachers" color="#2563eb"/>
+        <StatCard icon={FaUserCog}          label="মোট স্টাফ"    value={stats.staff}    href="/admin/dashboard/staff"    color="#059669"/>
         <StatCard icon={FaImages}           label="মোট ছবি"      value={stats.gallery}  href="/admin/dashboard/gallery"  color="#7c3aed"/>
         <StatCard icon={FaUserGraduate}     label="শিক্ষার্থী"   value={stats.students} href="/admin/dashboard/students" color="#d97706"/>
       </div>

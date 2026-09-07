@@ -1,5 +1,5 @@
 /* ============================================================
-   Teacher Directory — scoped styles
+   Staff Directory — scoped styles
    -----------------------------------------------------------
    Desktop (>=768px): numbered horizontal list rows
    Mobile  (<768px):  responsive card grid
@@ -220,7 +220,7 @@
 }
 
 /* ── Desktop row ─────────────────────────────────────────── */
-.teacherRow {
+.staffRow {
   position: relative;
   display: flex;
   align-items: stretch;
@@ -231,7 +231,7 @@
   padding: 16px 18px;
   transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
 }
-.teacherRow:hover {
+.staffRow:hover {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   border-color: color-mix(in srgb, var(--color-primary) 35%, #ebebeb);
   transform: translateY(-2px);
@@ -369,7 +369,7 @@
 /* ============================================================
    MOBILE / TABLET CARDS  (<768px)
    ============================================================ */
-.teacherCard {
+.staffCard {
   background: var(--color-card-bg, #fff);
   border: 1px solid #ebebeb;
   border-radius: var(--border-radius, 10px);
@@ -377,8 +377,8 @@
   cursor: pointer;
   transition: transform 0.18s, box-shadow 0.18s;
 }
-.teacherCard:hover,
-.teacherCard:active {
+.staffCard:hover,
+.staffCard:active {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
 }
@@ -419,18 +419,6 @@
   padding: 3px 7px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.92);
-}
-.cardBcsBadge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 3px 7px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--color-primary);
-  white-space: nowrap;
 }
 
 .cardBody { padding: 10px 12px 12px; }
@@ -497,16 +485,16 @@
   margin-bottom: 14px;
   background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
   background-size: 400% 100%;
-  animation: teacherShimmer 1.4s ease infinite;
+  animation: staffShimmer 1.4s ease infinite;
 }
 .skeletonCard {
   aspect-ratio: 3 / 4.3;
   border-radius: var(--border-radius, 10px);
   background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
   background-size: 400% 100%;
-  animation: teacherShimmer 1.4s ease infinite;
+  animation: staffShimmer 1.4s ease infinite;
 }
-@keyframes teacherShimmer {
+@keyframes staffShimmer {
   0% { background-position: 100% 50%; }
   100% { background-position: 0 50%; }
 }
@@ -692,7 +680,7 @@
 .modalClose:focus-visible,
 .clearSearch:focus-visible,
 .resetBtn:focus-visible,
-.teacherCard:focus-visible {
+.staffCard:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
@@ -717,9 +705,9 @@
 
 /* Respect the person's OS-level reduced-motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .teacherRow, .teacherCard, .cardActionBtn, .filterTab, .deptChip, .pageBtn, .pageNavBtn {
+  .staffRow, .staffCard, .cardActionBtn, .filterTab, .deptChip, .pageBtn, .pageNavBtn {
     transition: none !important;
   }
-  .teacherRow:hover, .teacherCard:hover { transform: none; }
+  .staffRow:hover, .staffCard:hover { transform: none; }
   .skeletonRow, .skeletonCard { animation: none; }
 }

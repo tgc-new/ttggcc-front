@@ -1,14 +1,14 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { FaPlus, FaEdit, FaTrash, FaTimes, FaSave, FaUserTie } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaTimes, FaSave, FaUserCog } from 'react-icons/fa';
 import toast from 'react-hot-toast';
-import { teachersAPI } from '../../../../lib/api';
+import { staffAPI } from '../../../../lib/api';
 
-const INIT = { name: '', nameBn: '', designation: '', designationBn: '', department: '', subject: '', qualification: '', bcsBatch: '', experience: '', phone: '', email: '', isPrincipal: false, isVicePrincipal: false, employeeType: 'mpo', order: 0, isActive: true };
+const INIT = { name: '', nameBn: '', designation: '', designationBn: '', department: '', qualification: '', experience: '', phone: '', email: '', employeeType: 'mpo', order: 0, isActive: true };
 
-export default function AdminTeachers() {
-  const [teachers, setTeachers] = useState([]);
+export default function AdminStaff() {
+  const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -20,18 +20,18 @@ export default function AdminTeachers() {
 
   const fetch = async () => {
     setLoading(true);
-    try { const r = await teachersAPI.getAll(); setTeachers(r.data || []); }
-    catch (e) { toast.error('শিক্ষকদের তথ্য লোড হয়নি'); }
+    try { const r = await staffAPI.getAll(); setStaff(r.data || []); }
+    catch (e) { toast.error('স্টাফদের তথ্য লোড হয়নি'); }
     setLoading(false);
   };
   useEffect(() => { fetch(); }, []);
 
   const openCreate = () => { setEditing(null); setForm(INIT); setPhoto(null); setPhotoPreview(''); setModal(true); };
-  const openEdit = (t) => {
-    setEditing(t._id);
-    setForm({ name: t.name, nameBn: t.nameBn || '', designation: t.designation, designationBn: t.designationBn || '', department: t.department || '', subject: t.subject || '', qualification: t.qualification || '', bcsBatch: t.bcsBatch || '', experience: t.experience || '', phone: t.phone || '', email: t.email || '', isPrincipal: t.isPrincipal, isVicePrincipal: t.isVicePrincipal, employeeType: t.employeeType, order: t.order, isActive: t.isActive });
+  const openEdit = (s) => {
+    setEditing(s._id);
+    setForm({ name: s.name, nameBn: s.nameBn || '', designation: s.designation, designationBn: s.designationBn || '', department: s.department || '', qualification: s.qualification || '', experience: s.experience || '', phone: s.phone || '', email: s.email || '', employeeType: s.employeeType, order: s.order, isActive: s.isActive });
     setPhoto(null);
-    setPhotoPreview(t.photo?.url || '');
+    setPhotoPreview(s.photo?.url || '');
     setModal(true);
   };
 
@@ -44,7 +44,7 @@ export default function AdminTeachers() {
   };
 
   const handleSave = async () => {
-    if (!form.nameBn && !form.name) return toast.error('শিক্ষকের নাম দিন');
+    if (!form.nameBn && !form.name) return toast.error('স্টাফের নাম দিন');
     if (!form.designation) return toast.error('পদবী দিন');
     setSaving(true);
     try {
@@ -52,11 +52,11 @@ export default function AdminTeachers() {
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       if (photo) fd.append('photo', photo);
       if (editing) {
-        await teachersAPI.update(editing, fd);
-        toast.success('শিক্ষকের তথ্য আপডেট হয়েছে');
+        await staffAPI.update(editing, fd);
+        toast.success('স্টাফের তথ্য আপডেট হয়েছে');
       } else {
-        await teachersAPI.create(fd);
-        toast.success('শিক্ষক যোগ হয়েছে');
+        await staffAPI.create(fd);
+        toast.success('স্টাফ যোগ হয়েছে');
       }
       setModal(false);
       fetch();
@@ -65,17 +65,17 @@ export default function AdminTeachers() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('এই শিক্ষকের তথ্য মুছে ফেলতে চান?')) return;
-    try { await teachersAPI.delete(id); toast.success('মুছে গেছে'); fetch(); }
+    if (!confirm('এই স্টাফের তথ্য মুছে ফেলতে চান?')) return;
+    try { await staffAPI.delete(id); toast.success('মুছে গেছে'); fetch(); }
     catch (e) { toast.error('মুছতে ব্যর্থ হয়েছে'); }
   };
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-700">শিক্ষক ব্যবস্থাপনা</h2>
+        <h2 className="text-xl font-bold text-gray-700">স্টাফ ব্যবস্থাপনা</h2>
         <button onClick={openCreate} className="btn-primary flex items-center gap-2 text-sm">
-          <FaPlus size={12} /> নতুন শিক্ষক
+          <FaPlus size={12} /> নতুন স্টাফ
         </button>
       </div>
 
@@ -89,48 +89,42 @@ export default function AdminTeachers() {
                   <th>ছবি</th>
                   <th>নাম</th>
                   <th className="hidden md:table-cell">পদবী</th>
-                  <th className="hidden md:table-cell">বিষয়</th>
+                  <th className="hidden md:table-cell">বিভাগ</th>
                   <th className="hidden md:table-cell">ধরন</th>
                   <th className="w-24 text-center">কার্যক্রম</th>
                 </tr>
               </thead>
               <tbody>
-                {teachers.length === 0 ? (
-                  <tr><td colSpan={7} className="text-center py-8 text-gray-400">কোনো শিক্ষক নেই</td></tr>
-                ) : teachers.map((t, i) => (
-                  <tr key={t._id}>
+                {staff.length === 0 ? (
+                  <tr><td colSpan={7} className="text-center py-8 text-gray-400">কোনো স্টাফ নেই</td></tr>
+                ) : staff.map((s, i) => (
+                  <tr key={s._id}>
                     <td>{i + 1}</td>
                     <td>
-                      {t.photo?.url ? (
+                      {s.photo?.url ? (
                         <div className="relative w-9 h-10">
-                          <Image src={t.photo.url} alt={t.name} fill className="object-cover rounded" sizes="36px" />
+                          <Image src={s.photo.url} alt={s.name} fill className="object-cover rounded" sizes="36px" />
                         </div>
                       ) : (
                         <div className="w-9 h-10 bg-primary/10 rounded flex items-center justify-center">
-                          <FaUserTie className="text-primary/40" size={16} />
+                          <FaUserCog className="text-primary/40" size={16} />
                         </div>
                       )}
                     </td>
                     <td>
-                      <div>
-                        <p className="font-medium text-sm">{t.nameBn || t.name}</p>
-                        <div className="flex items-center gap-1 flex-wrap mt-0.5">
-                          {t.isPrincipal && <span className="text-xs bg-primary/10 text-primary px-1.5 rounded">অধ্যক্ষ</span>}
-                          {t.bcsBatch && <span className="text-xs bg-blue-50 text-blue-600 px-1.5 rounded">BCS {t.bcsBatch}</span>}
-                        </div>
-                      </div>
+                      <p className="font-medium text-sm">{s.nameBn || s.name}</p>
                     </td>
-                    <td className="hidden md:table-cell text-sm text-gray-600">{t.designationBn || t.designation}</td>
-                    <td className="hidden md:table-cell text-sm text-gray-600">{t.subject || '—'}</td>
+                    <td className="hidden md:table-cell text-sm text-gray-600">{s.designationBn || s.designation}</td>
+                    <td className="hidden md:table-cell text-sm text-gray-600">{s.department || '—'}</td>
                     <td className="hidden md:table-cell">
-                      <span className={`text-xs px-2 py-0.5 rounded ${t.employeeType === 'mpo' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
-                        {t.employeeType?.toUpperCase()}
+                      <span className={`text-xs px-2 py-0.5 rounded ${s.employeeType === 'mpo' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                        {s.employeeType?.toUpperCase()}
                       </span>
                     </td>
                     <td>
                       <div className="flex justify-center gap-2">
-                        <button onClick={() => openEdit(t)} className="text-blue-600 hover:text-blue-700 p-1"><FaEdit size={14} /></button>
-                        <button onClick={() => handleDelete(t._id)} className="text-red-500 hover:text-red-600 p-1"><FaTrash size={14} /></button>
+                        <button onClick={() => openEdit(s)} className="text-blue-600 hover:text-blue-700 p-1"><FaEdit size={14} /></button>
+                        <button onClick={() => handleDelete(s._id)} className="text-red-500 hover:text-red-600 p-1"><FaTrash size={14} /></button>
                       </div>
                     </td>
                   </tr>
@@ -146,7 +140,7 @@ export default function AdminTeachers() {
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-5 border-b sticky top-0 bg-white z-10">
-              <h3 className="font-bold text-gray-700">{editing ? 'শিক্ষক সম্পাদনা' : 'নতুন শিক্ষক'}</h3>
+              <h3 className="font-bold text-gray-700">{editing ? 'স্টাফ সম্পাদনা' : 'নতুন স্টাফ'}</h3>
               <button onClick={() => setModal(false)} className="text-gray-400 hover:text-gray-600"><FaTimes size={18} /></button>
             </div>
             <div className="p-5 space-y-4">
@@ -155,7 +149,7 @@ export default function AdminTeachers() {
                 <div className="relative w-20 h-24 bg-gray-100 rounded overflow-hidden flex-shrink-0">
                   {photoPreview ? (
                     <Image src={photoPreview} alt="Preview" fill className="object-cover" sizes="80px" />
-                  ) : <div className="w-full h-full flex items-center justify-center"><FaUserTie className="text-gray-300" size={24} /></div>}
+                  ) : <div className="w-full h-full flex items-center justify-center"><FaUserCog className="text-gray-300" size={24} /></div>}
                 </div>
                 <div>
                   <label className="label">ছবি আপলোড</label>
@@ -176,31 +170,23 @@ export default function AdminTeachers() {
                 </div>
                 <div>
                   <label className="label">পদবী (বাংলা) *</label>
-                  <input value={form.designationBn} onChange={e => setForm({ ...form, designationBn: e.target.value })} className="input" placeholder="প্রভাষক" />
+                  <input value={form.designationBn} onChange={e => setForm({ ...form, designationBn: e.target.value })} className="input" placeholder="অফিস সহকারী" />
                 </div>
                 <div>
                   <label className="label">Designation</label>
-                  <input value={form.designation} onChange={e => setForm({ ...form, designation: e.target.value })} className="input" placeholder="Lecturer" />
-                </div>
-                <div>
-                  <label className="label">বিষয়</label>
-                  <input value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} className="input" placeholder="বাংলা" />
+                  <input value={form.designation} onChange={e => setForm({ ...form, designation: e.target.value })} className="input" placeholder="Office Assistant" />
                 </div>
                 <div>
                   <label className="label">বিভাগ</label>
-                  <input value={form.department} onChange={e => setForm({ ...form, department: e.target.value })} className="input" placeholder="মানবিক" />
+                  <input value={form.department} onChange={e => setForm({ ...form, department: e.target.value })} className="input" placeholder="প্রশাসনিক শাখা" />
                 </div>
                 <div>
                   <label className="label">শিক্ষাগত যোগ্যতা</label>
-                  <input value={form.qualification} onChange={e => setForm({ ...form, qualification: e.target.value })} className="input" placeholder="M.A, B.Ed" />
+                  <input value={form.qualification} onChange={e => setForm({ ...form, qualification: e.target.value })} className="input" placeholder="এইচএসসি" />
                 </div>
                 <div>
                   <label className="label">অভিজ্ঞতা</label>
-                  <input value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} className="input" placeholder="১০ বছর" />
-                </div>
-                <div className="col-span-2">
-                  <label className="label">BCS ব্যাচ (ঐচ্ছিক)</label>
-                  <input value={form.bcsBatch} onChange={e => setForm({ ...form, bcsBatch: e.target.value })} className="input" placeholder="যেমনঃ ৪০তম BCS" />
+                  <input value={form.experience} onChange={e => setForm({ ...form, experience: e.target.value })} className="input" placeholder="৫ বছর" />
                 </div>
                 <div>
                   <label className="label">মোবাইল</label>
@@ -208,10 +194,10 @@ export default function AdminTeachers() {
                 </div>
                 <div>
                   <label className="label">ইমেইল</label>
-                  <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="input" type="email" placeholder="teacher@email.com" />
+                  <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="input" type="email" placeholder="staff@email.com" />
                 </div>
                 <div>
-                  <label className="label">শিক্ষকের ধরন</label>
+                  <label className="label">স্টাফের ধরন</label>
                   <select value={form.employeeType} onChange={e => setForm({ ...form, employeeType: e.target.value })} className="input">
                     <option value="mpo">MPO</option>
                     <option value="non-mpo">Non-MPO</option>
@@ -224,17 +210,11 @@ export default function AdminTeachers() {
                 </div>
               </div>
               <div className="flex gap-4 flex-wrap">
-                {[
-                  { key: 'isPrincipal', label: 'অধ্যক্ষ' },
-                  { key: 'isVicePrincipal', label: 'উপ-অধ্যক্ষ' },
-                  { key: 'isActive', label: 'সক্রিয়' },
-                ].map(({ key, label }) => (
-                  <label key={key} className="flex items-center gap-2 cursor-pointer text-sm">
-                    <input type="checkbox" checked={form[key]} onChange={e => setForm({ ...form, [key]: e.target.checked })}
-                      className="rounded border-gray-300 text-primary" />
-                    {label}
-                  </label>
-                ))}
+                <label className="flex items-center gap-2 cursor-pointer text-sm">
+                  <input type="checkbox" checked={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.checked })}
+                    className="rounded border-gray-300 text-primary" />
+                  সক্রিয়
+                </label>
               </div>
             </div>
             <div className="flex gap-3 justify-end p-5 border-t">

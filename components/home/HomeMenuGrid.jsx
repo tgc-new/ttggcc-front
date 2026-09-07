@@ -17,7 +17,7 @@ const menuSections = [
       { label:'অর্গানোগ্রাম',        href:'/about#organogram' },
       { label:'পরিচালনা পর্ষদ',     href:'/committee' },
       { label:'অধ্যক্ষের বাণী',     href:'/about#chairman' },
-      { label:'স্টাফ ও কর্মচারী',   href:'/about#staff' },
+      { label:'স্টাফ ও কর্মচারী',   href:'/staff' },
     ]
   },
   {

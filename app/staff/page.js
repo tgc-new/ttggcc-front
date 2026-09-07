@@ -4,20 +4,20 @@ import Image from 'next/image';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import {
-  FaPhone, FaEnvelope, FaUserTie, FaSearch,  FaEye, FaTimes,
-  FaGraduationCap, FaBriefcase, FaBuilding, FaChevronLeft, FaChevronRight,
-  FaUsers, FaCalendarAlt, FaIdCard, FaIdBadge, FaFilter,
+  FaPhone, FaEnvelope, FaUserCog, FaSearch, FaEye, FaTimes,
+  FaGraduationCap, FaBuilding, FaChevronLeft, FaChevronRight,
+  FaUsers, FaCalendarAlt, FaIdCard, FaFilter,
 } from 'react-icons/fa';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { teachersAPI } from '../../lib/api';
+import { staffAPI } from '../../lib/api';
 import { useSiteData } from '../../lib/SiteDataContext';
-import styles from './teachers.module.css';
+import styles from './staff.module.css';
 
 /* ── Config ───────────────────────────────────────────────── */
 const PER_PAGE_OPTIONS = [10, 25, 50, 'all'];
 const TYPE_TABS = [
-  { value: 'all', label: 'সকল শিক্ষক' },
+  { value: 'all', label: 'সকল স্টাফ' },
 ];
 const UNSPECIFIED = '__unspecified__';
 
@@ -33,15 +33,15 @@ function formatDateBn(value) {
   return `${toBn(d.getDate())} ${MONTHS_BN[d.getMonth()]}, ${toBn(d.getFullYear())}`;
 }
 
-function buildVCard(teacher, orgName) {
-  const name = teacher.nameBn || teacher.name || '';
+function buildVCard(person, orgName) {
+  const name = person.nameBn || person.name || '';
   const lines = ['BEGIN:VCARD', 'VERSION:3.0', `FN:${name}`, `N:${name};;;;`];
   if (orgName) lines.push(`ORG:${orgName}`);
-  const title = teacher.designationBn || teacher.designation;
+  const title = person.designationBn || person.designation;
   if (title) lines.push(`TITLE:${title}`);
-  if (teacher.phone) lines.push(`TEL;TYPE=CELL:${teacher.phone}`);
-  if (teacher.email) lines.push(`EMAIL:${teacher.email}`);
-  if (teacher.department) lines.push(`NOTE:বিভাগ - ${teacher.department}`);
+  if (person.phone) lines.push(`TEL;TYPE=CELL:${person.phone}`);
+  if (person.email) lines.push(`EMAIL:${person.email}`);
+  if (person.department) lines.push(`NOTE:বিভাগ - ${person.department}`);
   lines.push('END:VCARD');
   return lines.join('\r\n');
 }
@@ -49,36 +49,36 @@ function buildVCard(teacher, orgName) {
 
 
 /* ── Page ─────────────────────────────────────────────────── */
-export default function TeachersPage() {
+export default function StaffPage() {
   const { settings, ensureLoaded } = useSiteData();
   const reduceMotion = useReducedMotion();
 
-  const [teachers, setTeachers] = useState([]);
+  const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [deptFilter, setDeptFilter] = useState('all');
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(1);
-  const [activeTeacher, setActiveTeacher] = useState(null);
+  const [activeStaff, setActiveStaff] = useState(null);
 
   useEffect(() => { ensureLoaded(); }, [ensureLoaded]);
 
   useEffect(() => {
-    teachersAPI.getAll()
-      .then((r) => setTeachers(r.data || []))
-      .catch(() => toast.error('শিক্ষকদের তথ্য লোড হয়নি'))
+    staffAPI.getAll()
+      .then((r) => setStaff(r.data || []))
+      .catch(() => toast.error('স্টাফদের তথ্য লোড হয়নি'))
       .finally(() => setLoading(false));
   }, []);
 
   // Lock background scroll + allow Escape to close the detail modal
   useEffect(() => {
-    document.body.style.overflow = activeTeacher ? 'hidden' : '';
+    document.body.style.overflow = activeStaff ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
-  }, [activeTeacher]);
+  }, [activeStaff]);
 
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') setActiveTeacher(null); };
+    const onKey = (e) => { if (e.key === 'Escape') setActiveStaff(null); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
@@ -88,32 +88,32 @@ export default function TeachersPage() {
   const departments = useMemo(() => {
     const set = new Set();
     let hasUnspecified = false;
-    teachers.forEach((t) => {
-      if (t.department && t.department.trim()) set.add(t.department.trim());
+    staff.forEach((s) => {
+      if (s.department && s.department.trim()) set.add(s.department.trim());
       else hasUnspecified = true;
     });
     const list = Array.from(set).sort((a, b) => a.localeCompare(b, 'bn'));
     if (hasUnspecified) list.push(UNSPECIFIED);
     return list;
-  }, [teachers]);
+  }, [staff]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return teachers.filter((t) => {
-      if (typeFilter !== 'all' && t.employeeType !== typeFilter) return false;
+    return staff.filter((s) => {
+      if (typeFilter !== 'all' && s.employeeType !== typeFilter) return false;
       if (deptFilter !== 'all') {
         if (deptFilter === UNSPECIFIED) {
-          if (t.department && t.department.trim()) return false;
-        } else if ((t.department || '').trim() !== deptFilter) return false;
+          if (s.department && s.department.trim()) return false;
+        } else if ((s.department || '').trim() !== deptFilter) return false;
       }
       if (q) {
-        const hay = [t.name, t.nameBn, t.designation, t.designationBn, t.department, t.subject, t.email, t.bcsBatch]
+        const hay = [s.name, s.nameBn, s.designation, s.designationBn, s.department, s.qualification, s.email]
           .filter(Boolean).join(' ').toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
-  }, [teachers, typeFilter, deptFilter, search]);
+  }, [staff, typeFilter, deptFilter, search]);
 
   // Any change to filters/search/page-size should snap back to page 1
   useEffect(() => { setPage(1); }, [search, typeFilter, deptFilter, perPage]);
@@ -147,9 +147,9 @@ export default function TeachersPage() {
       <Navbar />
 
       <div className="page-header">
-        <h1 className="text-3xl font-bold mb-2">শিক্ষকবৃন্দ তালিকা</h1>
+        <h1 className="text-3xl font-bold mb-2">স্টাফ ও কর্মচারী তালিকা</h1>
         <p className="text-green-200">
-          {loading ? 'তথ্য লোড হচ্ছে...' : `মোট ${toBn(teachers.length)} জন শিক্ষক-কর্মচারী`}
+          {loading ? 'তথ্য লোড হচ্ছে...' : `মোট ${toBn(staff.length)} জন স্টাফ ও কর্মচারী`}
         </p>
       </div>
 
@@ -164,7 +164,7 @@ export default function TeachersPage() {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="নাম, পদবি বা বিভাগ দিয়ে অনুসন্ধান করুন..."
               className={styles.searchInput}
-              aria-label="শিক্ষক অনুসন্ধান"
+              aria-label="স্টাফ অনুসন্ধান"
             />
             {search && (
               <button className={styles.clearSearch} onClick={() => setSearch('')} aria-label="অনুসন্ধান মুছুন">
@@ -227,7 +227,7 @@ export default function TeachersPage() {
 
         {/* ── Results line ── */}
         <p className={styles.resultsLine}>
-          {toBn(filtered.length)} জন শিক্ষক পাওয়া গেছে
+          {toBn(filtered.length)} জন স্টাফ পাওয়া গেছে
           {hasActiveFilters && (
             <button onClick={resetFilters} className={styles.resetBtn}>ফিল্টার মুছুন</button>
           )}
@@ -246,7 +246,7 @@ export default function TeachersPage() {
         ) : filtered.length === 0 ? (
           <div className={styles.emptyState}>
             <FaUsers size={40} className={styles.emptyIcon} />
-            <p>কোনো শিক্ষক পাওয়া যায়নি</p>
+            <p>কোনো স্টাফ পাওয়া যায়নি</p>
             {hasActiveFilters && (
               <button onClick={resetFilters} className={styles.resetBtn}>ফিল্টার মুছে সব দেখুন</button>
             )}
@@ -255,20 +255,17 @@ export default function TeachersPage() {
           <>
             {/* ══ DESKTOP: numbered list rows (md and up) ══ */}
             <div className={styles.desktopList}>
-              {paginated.map((t, i) => {
+              {paginated.map((s, i) => {
                 const serial = perPage === 'all' ? i + 1 : (pageSafe - 1) * perPage + i + 1;
                 return (
-                  <motion.div key={t._id} {...rowMotion(i)} className={styles.teacherRow}>
+                  <motion.div key={s._id} {...rowMotion(i)} className={styles.staffRow}>
                     <div className={styles.rowNumber}>{toBn(serial)}</div>
 
                     <div className={styles.rowPhoto}>
-                      {t.photo?.url ? (
-                        <Image src={t.photo.url} alt={t.nameBn || t.name} fill className={styles.rowPhotoImg} sizes="92px" />
+                      {s.photo?.url ? (
+                        <Image src={s.photo.url} alt={s.nameBn || s.name} fill className={styles.rowPhotoImg} sizes="92px" />
                       ) : (
-                        <div className={styles.rowPhotoFallback}><FaUserTie size={30} /></div>
-                      )}
-                      {(t.isPrincipal || t.isVicePrincipal) && (
-                        <span className={styles.rowRibbon}>{t.isPrincipal ? 'অধ্যক্ষ' : 'উপ-অধ্যক্ষ'}</span>
+                        <div className={styles.rowPhotoFallback}><FaUserCog size={30} /></div>
                       )}
                     </div>
 
@@ -276,21 +273,16 @@ export default function TeachersPage() {
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>নাম</span>
                         <span className={styles.infoValueStrong}>
-                          {t.nameBn || t.name}
-                          
+                          {s.nameBn || s.name}
                         </span>
                       </div>
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>পদবি</span>
-                        <span className={styles.infoValue} title={t.designationBn || t.designation}>{t.designationBn || t.designation}</span>
+                        <span className={styles.infoValue} title={s.designationBn || s.designation}>{s.designationBn || s.designation}</span>
                       </div>
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>বিভাগ</span>
-                        <span className={styles.infoValue} title={t.department}>{t.department || '—'}</span>
-                      </div>
-                      <div className={styles.infoRow}>
-                        <span className={styles.infoLabel}>বিষয়</span>
-                        <span className={styles.infoValue} title={t.subject}>{t.subject || '—'}</span>
+                        <span className={styles.infoValue} title={s.department}>{s.department || '—'}</span>
                       </div>
                     </div>
 
@@ -302,21 +294,15 @@ export default function TeachersPage() {
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>মোবাইল</span>
                         <span className={styles.infoValue}>
-                          {t.phone ? <a href={`tel:${t.phone}`} className={styles.linkValue}>{t.phone}</a> : '—'}
+                          {s.phone ? <a href={`tel:${s.phone}`} className={styles.linkValue}>{s.phone}</a> : '—'}
                         </span>
                       </div>
                       <div className={styles.infoRow}>
                         <span className={styles.infoLabel}>ইমেইল</span>
-                        <span className={styles.infoValue} title={t.email}>
-                          {t.email ? <a href={`mailto:${t.email}`} className={styles.linkValue}>{t.email}</a> : '—'}
+                        <span className={styles.infoValue} title={s.email}>
+                          {s.email ? <a href={`mailto:${s.email}`} className={styles.linkValue}>{s.email}</a> : '—'}
                         </span>
                       </div>
-                      {t.bcsBatch && (
-                        <div className={styles.infoRow}>
-                          <span className={styles.infoLabel}>BCS ব্যাচ</span>
-                          <span className={styles.infoValue}>{t.bcsBatch}</span>
-                        </div>
-                      )}
 
                       <div className={styles.rowActions}>
                         
@@ -329,43 +315,39 @@ export default function TeachersPage() {
 
             {/* ══ MOBILE / TABLET: card grid (below md) ══ */}
             <div className={styles.mobileGrid}>
-              {paginated.map((t, i) => (
+              {paginated.map((s, i) => (
                 <motion.div
-                  key={t._id}
+                  key={s._id}
                   {...rowMotion(i)}
-                  className={styles.teacherCard}
-                  onClick={() => setActiveTeacher(t)}
+                  className={styles.staffCard}
+                  onClick={() => setActiveStaff(s)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter') setActiveTeacher(t); }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setActiveStaff(s); }}
                 >
                   <div className={styles.cardPhoto}>
-                    {t.photo?.url ? (
-                      <Image src={t.photo.url} alt={t.nameBn || t.name} fill className={styles.cardPhotoImg} sizes="(max-width: 480px) 45vw, 200px" />
+                    {s.photo?.url ? (
+                      <Image src={s.photo.url} alt={s.nameBn || s.name} fill className={styles.cardPhotoImg} sizes="(max-width: 480px) 45vw, 200px" />
                     ) : (
-                      <div className={styles.cardPhotoFallback}><FaUserTie size={34} /></div>
+                      <div className={styles.cardPhotoFallback}><FaUserCog size={34} /></div>
                     )}
-                    {(t.isPrincipal || t.isVicePrincipal) && (
-                      <span className={styles.cardRibbon}>{t.isPrincipal ? 'অধ্যক্ষ' : 'উপ-অধ্যক্ষ'}</span>
-                    )}
-                    {t.bcsBatch && <span className={styles.cardBcsBadge}>BCS {t.bcsBatch}</span>}
                   </div>
 
                   <div className={styles.cardBody}>
-                    <h3 className={styles.cardName}>{t.nameBn || t.name}</h3>
-                    <p className={styles.cardDesignation}>{t.designationBn || t.designation}</p>
-                    {t.department && <p className={styles.cardDept}>{t.department}</p>}
-                    {t.email && <p className={styles.cardEmail} title={t.email}>{t.email}</p>}
+                    <h3 className={styles.cardName}>{s.nameBn || s.name}</h3>
+                    <p className={styles.cardDesignation}>{s.designationBn || s.designation}</p>
+                    {s.department && <p className={styles.cardDept}>{s.department}</p>}
+                    {s.email && <p className={styles.cardEmail} title={s.email}>{s.email}</p>}
 
                     <div className={styles.cardActions} onClick={(e) => e.stopPropagation()}>
-                      {t.phone && (
-                        <a href={`tel:${t.phone}`} className={`${styles.cardActionBtn} ${styles.callBtn}`} aria-label="কল করুন"><FaPhone size={12} /></a>
+                      {s.phone && (
+                        <a href={`tel:${s.phone}`} className={`${styles.cardActionBtn} ${styles.callBtn}`} aria-label="কল করুন"><FaPhone size={12} /></a>
                       )}
-                      {t.email && (
-                        <a href={`mailto:${t.email}`} className={`${styles.cardActionBtn} ${styles.mailBtn}`} aria-label="ইমেইল করুন"><FaEnvelope size={12} /></a>
+                      {s.email && (
+                        <a href={`mailto:${s.email}`} className={`${styles.cardActionBtn} ${styles.mailBtn}`} aria-label="ইমেইল করুন"><FaEnvelope size={12} /></a>
                       )}
-                     
-                      <button onClick={() => setActiveTeacher(t)} className={`${styles.cardActionBtn} ${styles.viewBtn}`} aria-label="বিস্তারিত দেখুন"><FaEye size={12} /></button>
+
+                      <button onClick={() => setActiveStaff(s)} className={`${styles.cardActionBtn} ${styles.viewBtn}`} aria-label="বিস্তারিত দেখুন"><FaEye size={12} /></button>
                     </div>
                   </div>
                 </motion.div>
@@ -417,11 +399,11 @@ export default function TeachersPage() {
 
       {/* ── Detail modal ── */}
       <AnimatePresence>
-        {activeTeacher && (
+        {activeStaff && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className={styles.modalOverlay}
-            onClick={() => setActiveTeacher(null)}
+            onClick={() => setActiveStaff(null)}
           >
             <motion.div
               initial={reduceMotion ? false : { opacity: 0, scale: 0.92, y: 20 }}
@@ -432,37 +414,32 @@ export default function TeachersPage() {
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
-              aria-label={activeTeacher.nameBn || activeTeacher.name}
+              aria-label={activeStaff.nameBn || activeStaff.name}
             >
-              <button onClick={() => setActiveTeacher(null)} className={styles.modalClose} aria-label="বন্ধ করুন">
+              <button onClick={() => setActiveStaff(null)} className={styles.modalClose} aria-label="বন্ধ করুন">
                 <FaTimes size={16} />
               </button>
 
               <div className={styles.modalHeader}>
                 <div className={styles.modalPhoto}>
-                  {activeTeacher.photo?.url ? (
-                    <Image src={activeTeacher.photo.url} alt={activeTeacher.nameBn || activeTeacher.name} fill className={styles.modalPhotoImg} sizes="108px" />
+                  {activeStaff.photo?.url ? (
+                    <Image src={activeStaff.photo.url} alt={activeStaff.nameBn || activeStaff.name} fill className={styles.modalPhotoImg} sizes="108px" />
                   ) : (
-                    <div className={styles.modalPhotoFallback}><FaUserTie size={44} /></div>
+                    <div className={styles.modalPhotoFallback}><FaUserCog size={44} /></div>
                   )}
                 </div>
-                <h2 className={styles.modalName}>{activeTeacher.nameBn || activeTeacher.name}</h2>
-                <p className={styles.modalDesignation}>{activeTeacher.designationBn || activeTeacher.designation}</p>
-                {(activeTeacher.isPrincipal || activeTeacher.isVicePrincipal) && (
-                  <span className={styles.modalRibbon}>{activeTeacher.isPrincipal ? 'অধ্যক্ষ' : 'উপ-অধ্যক্ষ'}</span>
-                )}
+                <h2 className={styles.modalName}>{activeStaff.nameBn || activeStaff.name}</h2>
+                <p className={styles.modalDesignation}>{activeStaff.designationBn || activeStaff.designation}</p>
               </div>
 
               <div className={styles.modalBody}>
                 {[
-                  { icon: <FaBuilding size={13} />, label: 'বিভাগ', value: activeTeacher.department },
-                  { icon: <FaBriefcase size={13} />, label: 'বিষয়', value: activeTeacher.subject },
-                  { icon: <FaGraduationCap size={13} />, label: 'যোগ্যতা', value: activeTeacher.qualification },
-                  { icon: <FaIdBadge size={13} />, label: 'BCS ব্যাচ', value: activeTeacher.bcsBatch },
-                  { icon: <FaIdCard size={13} />, label: 'অভিজ্ঞতা', value: activeTeacher.experience },
-                  { icon: <FaEnvelope size={13} />, label: 'ইমেইল', value: activeTeacher.email },
+                  { icon: <FaBuilding size={13} />, label: 'বিভাগ', value: activeStaff.department },
+                  { icon: <FaGraduationCap size={13} />, label: 'যোগ্যতা', value: activeStaff.qualification },
+                  { icon: <FaIdCard size={13} />, label: 'অভিজ্ঞতা', value: activeStaff.experience },
+                  { icon: <FaEnvelope size={13} />, label: 'ইমেইল', value: activeStaff.email },
                   { icon: <FaBuilding size={13} />, label: 'প্রতিষ্ঠান', value: orgName },
-                  { icon: <FaCalendarAlt size={13} />, label: 'যোগদান', value: formatDateBn(activeTeacher.joinDate) },
+                  { icon: <FaCalendarAlt size={13} />, label: 'যোগদান', value: formatDateBn(activeStaff.joinDate) },
                 ].filter((r) => r.value).map((r) => (
                   <div key={r.label} className={styles.modalRow}>
                     <span className={styles.modalRowIcon}>{r.icon}</span>
@@ -473,13 +450,12 @@ export default function TeachersPage() {
               </div>
 
               <div className={styles.modalActions}>
-                {activeTeacher.phone && (
-                  <a href={`tel:${activeTeacher.phone}`} className={styles.modalActionBtn}><FaPhone size={13} /> কল করুন</a>
+                {activeStaff.phone && (
+                  <a href={`tel:${activeStaff.phone}`} className={styles.modalActionBtn}><FaPhone size={13} /> কল করুন</a>
                 )}
-                {activeTeacher.email && (
-                  <a href={`mailto:${activeTeacher.email}`} className={styles.modalActionBtnOutline}><FaEnvelope size={13} /> ইমেইল</a>
+                {activeStaff.email && (
+                  <a href={`mailto:${activeStaff.email}`} className={styles.modalActionBtnOutline}><FaEnvelope size={13} /> ইমেইল</a>
                 )}
-                
               </div>
             </motion.div>
           </motion.div>
