@@ -84,7 +84,7 @@ export default function AdminLogin() {
           </div>
         </div>
         <p className="text-center text-white/40 text-xs mt-5">
-          © {new Date().getFullYear()} Malkhanagar College
+          © {new Date().getFullYear()} Tungipara Govt College
         </p>
       </div>
     </div>
