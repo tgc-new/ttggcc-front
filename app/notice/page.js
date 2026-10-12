@@ -127,17 +127,26 @@ export default function NoticePage() {
                       {format(new Date(notice.publishDate),'dd MMM yyyy')}
                     </td>
                     <td className="text-center">
-                      {notice.googleDriveLink ? (
-                        <a href={notice.googleDriveLink} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-xs font-medium">
-                          <FaGoogleDrive size={14}/>
-                        </a>
-                      ) : notice.pdfFile?.url ? (
-                        <a href={notice.pdfFile.url} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-red-600 hover:text-red-700 text-xs font-medium">
-                          <FaFilePdf size={14}/>
-                        </a>
-                      ) : <span className="text-gray-300">—</span>}
+                      <div className="flex justify-center items-center gap-2">
+                        {/* আপলোড করা PDF ফাইল থাকলে লাল আইকন দেখাবে */}
+                        {notice.pdfFile?.url && (
+                          <a href={notice.pdfFile.url} target="_blank" rel="noopener noreferrer"
+                            className="inline-flex items-center text-red-600 hover:text-red-700 p-1" title="PDF ডাউনলোড">
+                            <FaFilePdf size={15}/>
+                          </a>
+                        )}
+                        {/* Google Drive লিংক থাকলে নীল ড্রাইভ আইকন দেখাবে */}
+                        {notice.googleDriveLink && (
+                          <a href={notice.googleDriveLink} target="_blank" rel="noopener noreferrer"
+                            className="inline-flex items-center text-blue-600 hover:text-blue-700 p-1" title="Google Drive">
+                            <FaGoogleDrive size={15}/>
+                          </a>
+                        )}
+                        {/* যদি কোনো ফাইল না থাকে */}
+                        {!notice.pdfFile?.url && !notice.googleDriveLink && (
+                          <span className="text-gray-300">—</span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
