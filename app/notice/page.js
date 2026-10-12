@@ -130,7 +130,7 @@ export default function NoticePage() {
                       <div className="flex justify-center items-center gap-2">
                         {/* আপলোড করা PDF ফাইল থাকলে লাল আইকন দেখাবে */}
                         {notice.pdfFile?.url && (
-                          <a href={notice.pdfFile.url} download="notice.pdf" target="_blank" rel="noopener noreferrer"
+                          <a href={notice.pdfFile.url.replace('/upload/', '/upload/fl_attachment/')} target="_blank" rel="noopener noreferrer"
                             className="inline-flex items-center text-red-600 hover:text-red-700 p-1" title="PDF ডাউনলোড">
                             <FaFilePdf size={15}/>
                           </a>
