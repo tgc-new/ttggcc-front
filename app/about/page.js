@@ -29,7 +29,7 @@ export default function AboutPage() {
                 <FaInfoCircle size={18} /> কলেজের ইতিহাস
               </h2>
               <p className="text-gray-700 leading-relaxed text-sm">
-                {settings?.aboutHistory || `এই কলেজটি এলাকার শিক্ষার্থীদের উচ্চ মাধ্যমিক শিক্ষার সুযোগ প্রদান করে আসছে। প্রতিষ্ঠার পর থেকে কলেজটি শিক্ষার মান উন্নয়নে নিরলসভাবে কাজ করে যাচ্ছে।`}
+                {settings?.aboutHistory || `এই কলেজটি এলাকার শিক্ষার্থীদের উচ্চ মাধ্যমিক ও স্নাতক শিক্ষার সুযোগ প্রদান করে আসছে। প্রতিষ্ঠার পর থেকে কলেজটি শিক্ষার মান উন্নয়নে নিরলসভাবে কাজ করে যাচ্ছে।`}
               </p>
             </div>
 
@@ -91,7 +91,7 @@ export default function AboutPage() {
           <div className="space-y-4">
             {/* Principal */}
             <div className="card overflow-hidden" id="principal">
-              <div className="section-title bg-primary">সভাপতির বাণী</div>
+              <div className="section-title bg-primary">অধ্যক্ষের বাণী</div>
               <div className="p-4 text-center">
                 {settings?.principalPhoto?.url ? (
                   <div className="relative w-32 h-36 mx-auto mb-3">
@@ -103,7 +103,7 @@ export default function AboutPage() {
                   </div>
                 )}
                 <h3 className="font-bold text-gray-800">{settings?.principalNameBn || settings?.principalName || 'অধ্যক্ষ'}</h3>
-                <p className="text-xs text-gray-500 mb-3">{settings?.principalDesignation || 'অধ্যক্ষ, মাদরাসাতু দারিল কুরআন'}</p>
+                <p className="text-xs text-gray-500 mb-3">{settings?.principalDesignation || 'অধ্যক্ষ, টুঙ্গিপাড়া সরকারি কলেজ'}</p>
                 {settings?.principalMessage && (
                   <div className="relative text-left bg-gray-50 rounded p-3">
                     <FaQuoteLeft className="text-gray-200 absolute -top-1 -left-1" size={18} />
@@ -126,8 +126,8 @@ export default function AboutPage() {
                     <span className="text-4xl text-secondary/30">👤</span>
                   </div>
                 )}
-                <h3 className="font-bold text-gray-800">{settings?.chairmanNameBn || settings?.chairmanName || 'অধ্যক্ষ (ভারপ্রাপ্ত)'}</h3>
-                <p className="text-xs text-gray-500 mb-3">{settings?.chairmanDesignation || 'অধ্যক্ষ (ভারপ্রাপ্ত)'}</p>
+                <h3 className="font-bold text-gray-800">{settings?.chairmanNameBn || settings?.chairmanName || 'অধ্যক্ষ'}</h3>
+                <p className="text-xs text-gray-500 mb-3">{settings?.chairmanDesignation || 'অধ্যক্ষ'}</p>
                 {settings?.chairmanMessage && (
                   <div className="relative text-left bg-gray-50 rounded p-3">
                     <FaQuoteLeft className="text-gray-200 absolute -top-1 -left-1" size={18} />
