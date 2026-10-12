@@ -22,7 +22,7 @@ export default function AdmissionPage() {
                 <FaGraduationCap /> ভর্তি বিজ্ঞপ্তি ২০২৬-২৭
               </h2>
               <p className="text-sm text-gray-700">
-                মাদরাসাতু দারিল কুরআন একাদশ শ্রেণিতে বিজ্ঞান, মানবিক ও ব্যবসায় শিক্ষা বিভাগে ভর্তি চলছে। আগ্রহী শিক্ষার্থীরা অনলাইনে আবেদন করুন।
+                টুঙ্গিপাড়া সরকারি কলেজের একাদশ শ্রেণিতে বিজ্ঞান, মানবিক ও ব্যবসায় শিক্ষা বিভাগে ভর্তি চলছে। আগ্রহী শিক্ষার্থীরা অনলাইনে আবেদন করুন।
               </p>
               <a href="https://xiclassadmission.gov.bd" target="_blank" rel="noopener noreferrer"
                 className="mt-3 btn-primary inline-flex items-center gap-2 text-sm py-2">
@@ -35,7 +35,7 @@ export default function AdmissionPage() {
               <h2 className="text-xl font-bold text-primary mb-4 border-b pb-2">ভর্তির যোগ্যতা</h2>
               <div className="space-y-3">
                 {[
-                  { dept: 'বিজ্ঞান', req: 'SSC / সমমান পরীক্ষায় GPA ৩.৫০ বা তার বেশি' },
+                  { dept: 'বিজ্ঞান', req: 'SSC / সমমান পরীক্ষায় GPA ৩.0০ বা তার বেশি' },
                   { dept: 'মানবিক', req: 'SSC / সমমান পরীক্ষায় GPA ২.৫০ বা তার বেশি' },
                   { dept: 'ব্যবসায় শিক্ষা', req: 'SSC / সমমান পরীক্ষায় GPA ২.৫০ বা তার বেশি' },
                 ].map(({ dept, req }) => (
