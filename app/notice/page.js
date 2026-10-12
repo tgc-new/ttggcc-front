@@ -130,7 +130,7 @@ export default function NoticePage() {
                       <div className="flex justify-center items-center gap-2">
                         {/* আপলোড করা PDF ফাইল থাকলে লাল আইকন দেখাবে */}
                         {notice.pdfFile?.url && (
-                          <a href={`https://cloudinary.com{process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dtb2lqquw'}/image/download?public_id=${notice.pdfFile.url.split('/upload/')[1].split('/').slice(1).join('/').split('.')[0]}&format=pdf`} download="notice.pdf"
+                          <a href={notice.pdfFile.url.replace('/upload/', '/upload/fl_attachment,f_pdf/')} download="notice.pdf" target="_blank" rel="noopener noreferrer"
                             className="inline-flex items-center text-red-600 hover:text-red-700 p-1" title="PDF ডাউনলোড">
                             <FaFilePdf size={15}/>
                           </a>
