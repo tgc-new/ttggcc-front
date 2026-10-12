@@ -66,8 +66,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-sm text-gray-700">অফিস সময়</p>
-                    <p className="text-sm text-gray-600">শনি - বৃহস্পতি: সকাল ৯টা - বিকেল ৪টা</p>
-                    <p className="text-xs text-red-500">শুক্রবার বন্ধ</p>
+                    <p className="text-sm text-gray-600">রবিবার - বৃহস্পতি: সকাল ৯টা - বিকেল ৫টা</p>
+                    <p className="text-xs text-red-500">শুক্রবার-শনিবার বন্ধ</p>
                   </div>
                 </div>
               </div>
