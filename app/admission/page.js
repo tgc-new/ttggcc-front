@@ -35,7 +35,7 @@ export default function AdmissionPage() {
               <h2 className="text-xl font-bold text-primary mb-4 border-b pb-2">ভর্তির যোগ্যতা</h2>
               <div className="space-y-3">
                 {[
-                  { dept: 'বিজ্ঞান', req: 'SSC / সমমান পরীক্ষায় GPA ৩.0০ বা তার বেশি' },
+                  { dept: 'বিজ্ঞান', req: 'SSC / সমমান পরীক্ষায় GPA ৩.০০ বা তার বেশি' },
                   { dept: 'মানবিক', req: 'SSC / সমমান পরীক্ষায় GPA ২.৫০ বা তার বেশি' },
                   { dept: 'ব্যবসায় শিক্ষা', req: 'SSC / সমমান পরীক্ষায় GPA ২.৫০ বা তার বেশি' },
                 ].map(({ dept, req }) => (
@@ -60,9 +60,9 @@ export default function AdmissionPage() {
                   </thead>
                   <tbody>
                     {[
-                      { dept: 'বিজ্ঞান', total: 80, enrolled: 72, empty: 8 },
-                      { dept: 'মানবিক', total: 150, enrolled: 138, empty: 12 },
-                      { dept: 'ব্যবসায় শিক্ষা', total: 120, enrolled: 110, empty: 10 },
+                      { dept: 'বিজ্ঞান', total: 100, enrolled: 72, empty: 8 },
+                      { dept: 'মানবিক', total: 700, enrolled: 138, empty: 12 },
+                      { dept: 'ব্যবসায় শিক্ষা', total: 100, enrolled: 110, empty: 10 },
                     ].map(r => (
                       <tr key={r.dept}>
                         <td className="font-medium">{r.dept}</td>
