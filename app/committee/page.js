@@ -34,7 +34,7 @@ export default function CommitteePage() {
             {chairman.length > 0 && (
               <div className="mb-8">
                 <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
-                  <FaUserTie /> সভাপতি
+                  <FaUserTie /> অধ্যক্ষ
                 </h2>
                 <div className="flex flex-wrap justify-center gap-4">
                   {chairman.map((m, i) => (
