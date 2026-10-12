@@ -46,7 +46,7 @@ export default function ApprovalsPage() {
           </div>
           <div>
             <h3 className="font-bold text-green-800 mb-1">সরকারি স্বীকৃতিপ্রাপ্ত প্রতিষ্ঠান</h3>
-            <p className="text-sm text-green-700">মাদরাসাতু দারিল কুরআন একটি উচ্চ মাধ্যমিক শিক্ষা প্রতিষ্ঠান।</p>
+            <p className="text-sm text-green-700">টুঙ্গিপাড়া সরকারি কলেজ একটি স্নাতক পর্যায়ের শিক্ষা প্রতিষ্ঠান।</p>
           </div>
         </div>
 
