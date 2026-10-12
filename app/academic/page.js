@@ -4,7 +4,7 @@ import { FaBookOpen, FaCalendarAlt, FaClock, FaDownload } from 'react-icons/fa';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'একাডেমিক - মাদরাসাতু দারিল কুরআন',
+  title: 'একাডেমিক - টুঙ্গিপাড়া সরকারি কলেজ',
 };
 
 export default function AcademicPage() {
@@ -53,9 +53,9 @@ export default function AcademicPage() {
               </thead>
               <tbody>
                 {[
-                  { dept: 'বিজ্ঞান', subjects: 'পদার্থ, রসায়ন, জীববিজ্ঞান, গণিত', seats: '৮০', teachers: '৮' },
-                  { dept: 'মানবিক', subjects: 'বাংলা, ইংরেজি, ইতিহাস, ইসলামের ইতিহাস', seats: '১৫০', teachers: '১২' },
-                  { dept: 'ব্যবসায় শিক্ষা', subjects: 'হিসাববিজ্ঞান, ব্যবসায় সংগঠন, ফিন্যান্স', seats: '১২০', teachers: '৮' },
+                  { dept: 'বিজ্ঞান', subjects: 'পদার্থ, রসায়ন, জীববিজ্ঞান, উচ্চতর গণিত', seats: '৮০', teachers: '৮' },
+                  { dept: 'মানবিক', subjects: 'বাংলা, ইংরেজি, আইসিটি, অর্থনীতি, যুক্তিবিদ্যা, ভূগোল, ইসলামের ইতিহাস ও সংস্কৃতি, পৌরনীতি ও সুশাসন, সমাজকর্ম, পরিসংখ্যান, সংস্কৃত, কৃষিশিক্ষা, ইসলাম শিক্ষা', seats: '১৫০', teachers: '১২' },
+                  { dept: 'ব্যবসায় শিক্ষা', subjects: 'হিসাববিজ্ঞান, ব্যবসায় সংগঠন ও ব্যবস্থাপনা, ফিন্যান্স, ব্যাংকিং ও বীমা', seats: '১২০', teachers: '৮' },
                 ].map(row => (
                   <tr key={row.dept}>
                     <td className="font-medium">{row.dept}</td>
