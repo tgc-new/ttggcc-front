@@ -12,7 +12,7 @@ export default function ContactPage() {
     settingsAPI.get().then(r => setSettings(r.data)).catch(() => {});
   }, []);
 
-  const defaultMap = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3648.3!2d90.5!3d23.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDM2JzAwLjAiTiA5MMKwMzAnMDAuMCJF!5e0!3m2!1sen!2sbd!4v1234567890`;
+  const defaultMap = `https://maps.app.goo.gl/DPHAJXeNyXCWRgTw9`;
 
   return (
     <>
@@ -34,8 +34,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-sm text-gray-700">ঠিকানা</p>
-                    <p className="text-sm text-gray-600 mt-0.5">{settings?.address || 'মালখানগর, সিরাজদিখান, মুন্সিগঞ্জ, ঢাকা'}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{settings?.addressEn || 'Malkhanagar, Sirajdikhan, Munshiganj, Dhaka'}</p>
+                    <p className="text-sm text-gray-600 mt-0.5">{settings?.address || 'টুঙ্গিপাড়া, গোপালগঞ্জ, ঢাকা'}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{settings?.addressEn || 'tungipara, Gopalganj, Dhaka'}</p>
                   </div>
                 </div>
                 {settings?.phone?.map((ph, i) => (
@@ -79,7 +79,7 @@ export default function ContactPage() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between border-b border-white/20 pb-1">
                   <span className="opacity-80">EIIN নম্বর:</span>
-                  <span className="font-bold">{settings?.eiinNumber || '134590'}</span>
+                  <span className="font-bold">{settings?.eiinNumber || '109678'}</span>
                 </div>
                 {settings?.mpoNumber && (
                   <div className="flex justify-between border-b border-white/20 pb-1">
@@ -89,7 +89,7 @@ export default function ContactPage() {
                 )}
                 <div className="flex justify-between border-b border-white/20 pb-1">
                   <span className="opacity-80">প্রতিষ্ঠিত:</span>
-                  <span className="font-bold">{settings?.establishedYear || '১৯৯১'}</span>
+                  <span className="font-bold">{settings?.establishedYear || '১৯৮৬'}</span>
                 </div>
               </div>
             </div>
