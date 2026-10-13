@@ -66,7 +66,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-sm text-gray-700">অফিস সময়</p>
-                    <p className="text-sm text-gray-600">রবিবার - বৃহস্পতি: সকাল ৯টা - বিকেল ৫টা</p>
+                    <p className="text-sm text-gray-600">রবিবার - বৃহস্পতিবার: সকাল ৯টা - বিকেল ৫টা</p>
                     <p className="text-xs text-red-500">শুক্রবার-শনিবার বন্ধ</p>
                   </div>
                 </div>
@@ -83,8 +83,8 @@ export default function ContactPage() {
                 </div>
                 {settings?.mpoNumber && (
                   <div className="flex justify-between border-b border-white/20 pb-1">
-                    <span className="opacity-80">MPO নম্বর:</span>
-                    <span className="font-bold">{settings.mpoNumber}</span>
+                    <span className="opacity-80">জাতীয় বিশ্ববিদ্যালয়ের কোড নম্বর :</span>
+                    <span className="font-bold">{settings.mpoNumber|| '6111'}</span>
                   </div>
                 )}
                 <div className="flex justify-between border-b border-white/20 pb-1">
