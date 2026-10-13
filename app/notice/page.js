@@ -138,7 +138,7 @@ export default function NoticePage() {
                           {/* পিডিএফ ফাইল থাকলে গুগলের সিকিউর ডক ভিউয়ার দিয়ে ওপেন হবে */}
                           {notice.pdfFile?.url && (
                             <a
-                              href={`https://google.com{encodeURIComponent(notice.pdfFile.url)}`}
+                              href={`https://docs.google.com/viewer?url=${encodeURIComponent(notice.pdfFile.url)}`}
                               download="notice.pdf"
                               target="_blank"
                               rel="noopener noreferrer"
