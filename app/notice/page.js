@@ -128,54 +128,73 @@ export default function NoticePage() {
                     </td>
                     <td className="text-center">
                       <div className="flex justify-center items-center gap-2">
-                        {/* আপলোড করা PDF ফাইল থাকলে লাল আইকন দেখাবে */}
-                        {notice.pdfFile?.url && (
-                        <a href={`https://docs.google.com/viewer?url=${encodeURIComponent(notice.pdfFile.url)}&embedded=true`} download="notice.pdf" target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center text-red-600 hover:text-red-700 p-1" title="PDF ডাউনলোড">
-                            <FaFilePdf size={15}/>
-                          </a>
-                        )}
-                        {/* Google Drive লিংক থাকলে নীল ড্রাইভ আইকন দেখাবে */}
-                        {notice.googleDriveLink && (
-                          <a href={notice.googleDriveLink} target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center text-blue-600 hover:text-blue-700 p-1" title="Google Drive">
-                            <FaGoogleDrive size={15}/>
-                          </a>
-                        )}
-                        {/* যদি কোনো ফাইল না থাকে */}
-                        {!notice.pdfFile?.url && !notice.googleDriveLink && (
-                          <span className="text-gray-300">—</span>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                        <tbody>
+  {filtered.length === 0 ? (
+    <tr>
+      <td colSpan={5} className="text-center py-10 text-gray-400">
+        কোনো নোটিশ পাওয়া যায়নি
+      </td>
+    </tr>
+  ) : (
+    filtered.map((notice, i) => (
+      <tr key={notice._id} className="hover:bg-green-50 transition-colors">
+        <td className="text-gray-500 text-sm">{(page - 1) * 15 + i + 1}</td>
+        <td>
+          <div className="flex items-start gap-2 flex-wrap">
+            <Link
+              href={`/notice/${notice._id}`}
+              className="text-sm font-medium text-gray-800 hover:text-primary transition-colors"
+            >
+              {notice.titleBn || notice.title}
+            </Link>
+            <div className="flex gap-1 flex-wrap">
+              {notice.isNewNotice && <span className="badge-new">নতুন</span>}
+              {notice.isImportant && <span className="badge-important">জরুরি</span>}
+            </div>
           </div>
-        )}
-
-        {/* Pagination */}
-        {pagination.pages > 1 && (
-          <div className="flex justify-center gap-2 mt-6 flex-wrap">
-            <button disabled={page===1} onClick={()=>setPage(p=>p-1)}
-              className="px-3 py-2 rounded border text-sm disabled:opacity-40 hover:bg-primary/10">
-              ← আগের
-            </button>
-            {Array.from({length:pagination.pages}).map((_,i)=>(
-              <button key={i} onClick={()=>setPage(i+1)}
-                className={`w-9 h-9 rounded text-sm transition-colors ${page===i+1?'bg-primary text-white':'bg-white border hover:bg-primary/10'}`}>
-                {i+1}
-              </button>
-            ))}
-            <button disabled={page===pagination.pages} onClick={()=>setPage(p=>p+1)}
-              className="px-3 py-2 rounded border text-sm disabled:opacity-40 hover:bg-primary/10">
-              পরের →
-            </button>
+        </td>
+        <td className="hidden md:table-cell">
+          <span className={`text-xs px-2 py-0.5 rounded ${catColors[notice.category] || catColors.general}`}>
+            {CATEGORIES.find((c) => c.value === notice.category)?.label || notice.category}
+          </span>
+        </td>
+        <td className="hidden md:table-cell text-xs text-gray-500">
+          {format(new Date(notice.publishDate), 'dd MMM yyyy')}
+        </td>
+        <td className="text-center">
+          <div className="flex justify-center items-center gap-2">
+            {/* পিডিএফ ফাইল থাকলে গুগলের সিকিউর ডক ভিউয়ার দিয়ে ওপেন হবে */}
+            {notice.pdfFile?.url && (
+              <a
+                href={`https://docs.google.com/viewer?url=${encodeURIComponent(notice.pdfFile.url)}&embedded=true`}
+                download="notice.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-red-600 hover:text-red-700 p-1"
+                title="PDF ডাউনলোড"
+              >
+                <FaFilePdf size={15} />
+              </a>
+            )}
+            {/* গুগল ড্রাইভ লিংক থাকলে নীল ড্রাইভ আইকন দেখাবে */}
+            {notice.googleDriveLink && (
+              <a
+                href={notice.googleDriveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-blue-600 hover:text-blue-700 p-1"
+                title="Google Drive"
+              >
+                <FaGoogleDrive size={15} />
+              </a>
+            )}
+            {/* যদি কোনো ফাইল না থাকে */}
+            {!notice.pdfFile?.url && !notice.googleDriveLink && (
+              <span className="text-gray-300">—</span>
+            )}
           </div>
-        )}
-      </div>
-      <Footer/>
-    </>
-  );
-}
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
