@@ -115,7 +115,7 @@ export default function AboutPage() {
 
             {/* Chairman */}
             <div className="card overflow-hidden" id="chairman">
-              <div className="section-title bg-secondary">অধ্যক্ষের বাণী</div>
+              <div className="section-title bg-secondary">উপাধ্যক্ষের বাণী</div>
               <div className="p-4 text-center">
                 {settings?.chairmanPhoto?.url ? (
                   <div className="relative w-32 h-36 mx-auto mb-3">
